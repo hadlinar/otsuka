@@ -6,4 +6,6 @@ abstract class UserEvent{}
 
 class GetUserEvent extends UserEvent{}
 
+class GetUserOIEvent extends UserEvent{}
+
 class LogoutEvent extends UserEvent{}

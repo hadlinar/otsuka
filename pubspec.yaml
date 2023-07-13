@@ -47,6 +47,7 @@ flutter:
      - assets/icons/ic_check.png
      - assets/icons/ic_warning.png
      - assets/icons/ic_profile.png
+     - assets/icons/ic_empty.png
 
   fonts:
      - family: book

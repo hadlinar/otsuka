@@ -34,10 +34,8 @@ class UserBloc extends Bloc<UserEvent, UserBlocState> {
   Stream<UserBlocState> _mapToGetUserEvent(GetUserEvent e) async* {
     yield LoadingUserState();
     final token = _sharedPreferences.getString("access_token");
-    print(token);
     try{
       final response = await _userRepository.getUser("Bearer $token");
-      print(response);
       if (response.message == "ok") {
         yield GetUserState(response.result);
       }

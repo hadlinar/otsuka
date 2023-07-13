@@ -29,20 +29,16 @@ class PDKBloc extends Bloc<PDKBlocEvent, PDKBlocState> {
     final token = _sharedPreferences.getString("access_token");
 
     try {
-      final response = await _PDKRepository.getListProcess(
-          token: "Bearer $token",
-          branch: e.branch,
-          role: e.role,
-          cat: e.cat
-      );
+      final response = await _PDKRepository.getListProcess("Bearer $token");
       if(response.message == "ok") {
+        print(response.result[0]);
         yield GetListProcessState(response.result);
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 500) {
         yield FailedPDKState();
       } else if (e.response?.statusCode == 504) {
-        yield NotLoggedInState();
+        yield NotLoggedInPDKState();
       }
     }
   }

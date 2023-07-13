@@ -36,7 +36,7 @@ class LoginBloc extends Bloc<LoginBlocEvent, LoginBlocState> {
         yield SuccessLoginState();
       }
     } on DioException catch (e) {
-      if (e.response?.statusCode == 403) {
+      if (e.response?.statusCode == 401) {
         yield WrongPasswordLoginState();
       } else if (e.response?.statusCode == 500) {
         yield NoAccessState();

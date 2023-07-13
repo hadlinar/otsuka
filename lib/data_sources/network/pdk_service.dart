@@ -1,4 +1,4 @@
-import 'package:ediscount/models/list_process.dart';
+import 'package:ediscount/models/pdk.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
@@ -12,6 +12,6 @@ part 'pdk_service.g.dart';
 abstract class PDKService{
   static create(Dio dio) => _PDKService(dio);
 
-  @GET('/list/process')
-  Future<ListProcessResponse> getListProcess(@Header("Authorization") String authorization, @Body() Map<String, dynamic> body);
+  @GET('/process')
+  Future<ListProcessResponse> getListProcess(@Header("Authorization") String authorization);
 }

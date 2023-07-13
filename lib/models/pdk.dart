@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-part 'list_process.g.dart';
+part 'pdk.g.dart';
 
 // {
 // "id": 77,
@@ -37,7 +37,7 @@ part 'list_process.g.dart';
 @JsonSerializable()
 class PDK {
   int id;
-  String no_register;
+  String? no_register;
   String branch_id;
   String? kategori_otsuka;
   String kode_pelanggan;
@@ -65,6 +65,8 @@ class PDK {
   DateTime? date_approve_6;
   String no_draft;
   String rm_otsuka;
+  String branch;
+  String cust;
 
   PDK({
     required this.id,
@@ -95,7 +97,9 @@ class PDK {
     this.user_desc_6,
     this.date_approve_6,
     required this.no_draft,
-    required this.rm_otsuka
+    required this.rm_otsuka,
+    required this.branch,
+    required this.cust
   });
 
   factory PDK.fromJson(Map<String, dynamic> json) => _$PDKFromJson(json);

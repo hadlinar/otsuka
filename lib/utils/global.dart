@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Global {
   // static const String baseUrl = "http://10.0.2.2:3000/otsuka/ediscount";
@@ -17,10 +18,12 @@ class Global {
   static int RED = 0xffFF5F65;
   static int GREEN = 0xff36C238;
   static int GREY = 0xffD3DFEC;
+  static int DARK_GREY = 0xff7E7E7E;
 
   static const IC_WARNING = "assets/icons/ic_cancel.png";
   static const IC_CHECK = "assets/icons/ic_check.png";
   static const IC_CANCEL = "assets/icons/ic_cancel.png";
+  static const IC_EMPTY = "assets/icons/ic_empty.png";
 
   static TextStyle? getCustomFont(int color, double fontSize, String fontName) {
     return TextStyle(
@@ -113,6 +116,52 @@ class Global {
           )
         ],
       ),
+    );
+  }
+
+  static Card getCardList(String kodPel, String cabang, String cust, DateTime date) {
+    return Card(
+        elevation: 0,
+        shadowColor: const Color(0xffBCBCBC),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Container(
+            padding: const EdgeInsets.only(left: 12, top: 7),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(cust, style: Global.getCustomFont(BLACK, 14, 'medium')),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(kodPel, style: Global.getCustomFont(DARK_GREY, 14, 'book')),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text("CABANG ${cabang}", style: Global.getCustomFont(DARK_GREY, 14, 'book')),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 8, right: 10),
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(DateFormat('d MMM yyyy').format(date), style: Global.getCustomFont(DARK_GREY, 14, 'book')),
+                  ),
+                ),
+              ],
+            )
+        )
     );
   }
 }

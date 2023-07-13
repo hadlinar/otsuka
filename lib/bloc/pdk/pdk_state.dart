@@ -1,4 +1,4 @@
-import 'package:ediscount/models/list_process.dart';
+import 'package:ediscount/models/pdk.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -23,7 +23,7 @@ class FailedPDKState extends PDKBlocState{
   List<Object?> get props => [];
 }
 
-class NotLoggedInState extends PDKBlocState{
+class NotLoggedInPDKState extends PDKBlocState{
   @override
   List<Object?> get props => [];
 }

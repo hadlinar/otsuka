@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'list_process.dart';
+part of 'pdk.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -8,7 +8,7 @@ part of 'list_process.dart';
 
 PDK _$PDKFromJson(Map<String, dynamic> json) => PDK(
       id: json['id'] as int,
-      no_register: json['no_register'] as String,
+      no_register: json['no_register'] as String?,
       branch_id: json['branch_id'] as String,
       kategori_otsuka: json['kategori_otsuka'] as String?,
       kode_pelanggan: json['kode_pelanggan'] as String,
@@ -48,6 +48,8 @@ PDK _$PDKFromJson(Map<String, dynamic> json) => PDK(
           : DateTime.parse(json['date_approve_6'] as String),
       no_draft: json['no_draft'] as String,
       rm_otsuka: json['rm_otsuka'] as String,
+      branch: json['branch'] as String,
+      cust: json['cust'] as String,
     );
 
 Map<String, dynamic> _$PDKToJson(PDK instance) => <String, dynamic>{
@@ -80,6 +82,8 @@ Map<String, dynamic> _$PDKToJson(PDK instance) => <String, dynamic>{
       'date_approve_6': instance.date_approve_6?.toIso8601String(),
       'no_draft': instance.no_draft,
       'rm_otsuka': instance.rm_otsuka,
+      'branch': instance.branch,
+      'cust': instance.cust,
     };
 
 ListProcessResponse _$ListProcessResponseFromJson(Map<String, dynamic> json) =>

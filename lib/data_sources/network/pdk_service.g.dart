@@ -21,16 +21,12 @@ class _PDKService implements PDKService {
   String? baseUrl;
 
   @override
-  Future<ListProcessResponse> getListProcess(
-    String authorization,
-    Map<String, dynamic> body,
-  ) async {
+  Future<ListProcessResponse> getListProcess(String authorization) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Authorization': authorization};
     _headers.removeWhere((k, v) => v == null);
-    final _data = <String, dynamic>{};
-    _data.addAll(body);
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<ListProcessResponse>(Options(
       method: 'GET',
@@ -39,7 +35,7 @@ class _PDKService implements PDKService {
     )
             .compose(
               _dio.options,
-              '/list/process',
+              '/process',
               queryParameters: queryParameters,
               data: _data,
             )
