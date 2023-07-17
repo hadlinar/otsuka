@@ -26,9 +26,9 @@ class UserBloc extends Bloc<UserEvent, UserBlocState> {
     if(event is GetUserEvent) {
       yield* _mapToGetUserEvent(event);
     }
-    // if(event is LogoutEvent) {
-    //   yield* _logoutToState(event);
-    // }
+    if(event is LogoutEvent) {
+      yield* _logoutToState(event);
+    }
   }
 
   Stream<UserBlocState> _mapToGetUserEvent(GetUserEvent e) async* {
@@ -49,22 +49,21 @@ class UserBloc extends Bloc<UserEvent, UserBlocState> {
     }
   }
 
-  // Stream<UserBlocState> _logoutToState(LogoutEvent e) async* {
-  //   yield LoadingUserState();
-  //   final token = _sharedPreferences.getString("access_token");
-  //   try {
-  //     final response = await _logoutRepository.logout("Bearer $token");
-  //     print(response.message);
-  //     if(response.message == "Log out") {
-  //       SharedPreferences prefs = await SharedPreferences.getInstance();
-  //       await prefs.remove("access_token");
-  //       yield NotLoggedInState();
-  //     }
-  //   } on DioError catch (e) {
-  //     if(e.response?.statusCode == 400){
-  //       yield NotLoggedInState();
-  //     }
-  //     yield ServerErrorState();
-  //   }
-  // }
+  Stream<UserBlocState> _logoutToState(LogoutEvent e) async* {
+    yield LoadingUserState();
+    final token = _sharedPreferences.getString("access_token");
+    try {
+      final response = await _userRepository.logout("Bearer $token");
+      if(response.message == "you've been logged out") {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.remove("access_token");
+        yield NotLoggedInState();
+      }
+    } on DioError catch (e) {
+      if(e.response?.statusCode == 400){
+        yield NotLoggedInState();
+      }
+      yield ServerErrorState();
+    }
+  }
 }

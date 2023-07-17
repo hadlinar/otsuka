@@ -24,10 +24,18 @@ class _LoginPage extends State<Login> {
   bool showPassword = true;
 
   @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginBlocState>(
       listener: (context, state) {
         if (state is LoadingLoginState) {
+          print(state.toString());
           showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -61,7 +69,6 @@ class _LoginPage extends State<Login> {
           );
         }
         else if (state is SuccessLoginState) {
-
           Navigator.push(context, MaterialPageRoute(
               builder: (context) => Home()
           ));
@@ -74,6 +81,19 @@ class _LoginPage extends State<Login> {
                   Navigator.pop(context);
                   Navigator.pop(context);
                 }, context, Global.IC_WARNING, "Wrong password", "Ok", false);
+              }
+          );
+        }
+        else if (state is NoUsernameState) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Global.defaultModal(() {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }, context, Global.IC_WARNING, "User not found", "Ok", false);
               }
           );
         }

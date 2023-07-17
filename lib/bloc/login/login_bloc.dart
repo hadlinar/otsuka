@@ -39,13 +39,13 @@ class LoginBloc extends Bloc<LoginBlocEvent, LoginBlocState> {
       if (e.response?.statusCode == 401) {
         yield WrongPasswordLoginState();
       } else if (e.response?.statusCode == 500) {
-        yield NoAccessState();
+        yield FailedLoginState();
       } else if (e.response?.statusCode == 504) {
         yield NotLoggedInState();
       } else if (e.response?.statusCode == 400) {
         yield NotMatchedLoginState();
-      } else if (e.response?.statusCode == 420) {
-        yield NoAccessState();
+      } else if (e.response?.statusCode == 404) {
+        yield NoUsernameState();
       }
     }
   }

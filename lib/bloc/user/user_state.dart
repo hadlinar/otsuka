@@ -39,3 +39,8 @@ class GetUserState extends UserBlocState{
 
   GetUserState(this.getUser);
 }
+
+class LogoutState extends UserBlocState{
+  @override
+  List<Object?> get props => [];
+}

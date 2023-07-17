@@ -38,3 +38,24 @@ class GetListProcessState extends PDKBlocState{
 
   GetListProcessState(this.getListProcess);
 }
+
+class GetDetailState extends PDKBlocState{
+  List<DetailPDK> getPDKDetail;
+
+  GetDetailState(this.getPDKDetail);
+}
+
+class SuccessPostApproveState extends PDKBlocState{
+  @override
+  List<Object?> get props => [];
+}
+
+class SuccessPostRejectState extends PDKBlocState{
+  @override
+  List<Object?> get props => [];
+}
+
+class PostFailedPDKState extends PDKBlocState{
+  @override
+  List<Object?> get props => [];
+}

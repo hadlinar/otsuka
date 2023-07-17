@@ -11,4 +11,9 @@ class UserRepository {
     final response = await userService.getUser(token);
     return response;
   }
+
+  Future<LogoutResponse> logout(String token) async {
+    final response = await userService.logout(token);
+    return response;
+  }
 }

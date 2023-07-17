@@ -14,4 +14,7 @@ abstract class UserService{
 
   @GET('/user')
   Future<UserResponse> getUser(@Header("Authorization") String authorization);
+
+  @POST('/logout')
+  Future<LogoutResponse> logout(@Header("Authorization") String authorization);
 }

@@ -14,6 +14,11 @@ class SuccessLoginState extends LoginBlocState{
   List<Object?> get props => [];
 }
 
+class FailedLoginState extends LoginBlocState{
+  @override
+  List<Object?> get props => [];
+}
+
 class WrongPasswordLoginState extends LoginBlocState{
   @override
   List<Object?> get props => [];
@@ -39,7 +44,7 @@ class NewPasswordNotMatchedState extends LoginBlocState{
   List<Object?> get props => [];
 }
 
-class NoAccessState extends LoginBlocState{
+class NoUsernameState extends LoginBlocState{
   @override
   List<Object?> get props => [];
 }

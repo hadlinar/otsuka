@@ -36,3 +36,13 @@ Map<String, dynamic> _$UserResponseToJson(UserResponse instance) =>
       'message': instance.message,
       'result': instance.result,
     };
+
+LogoutResponse _$LogoutResponseFromJson(Map<String, dynamic> json) =>
+    LogoutResponse(
+      json['message'] as String,
+    );
+
+Map<String, dynamic> _$LogoutResponseToJson(LogoutResponse instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+    };
