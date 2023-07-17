@@ -5,15 +5,11 @@ import 'package:flutter/material.dart';
 
 
 class Router {
-  static const home = "/";
   static const login = "/login";
 
   static Route<dynamic> generateRouter(RouteSettings settings) {
-    Widget widget = Home();
+    Widget widget = Login();
     switch(settings.name) {
-      case home:
-        widget = Home();
-        break;
       case login:
         widget = Login();
         break;

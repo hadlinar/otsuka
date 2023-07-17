@@ -41,3 +41,12 @@ class UserResponse {
 
   factory UserResponse.fromJson(Map<String, dynamic> json) => _$UserResponseFromJson(json);
 }
+
+@JsonSerializable()
+class LogoutResponse {
+  String message;
+
+  LogoutResponse(this.message);
+
+  factory LogoutResponse.fromJson(Map<String, dynamic> json) => _$LogoutResponseFromJson(json);
+}

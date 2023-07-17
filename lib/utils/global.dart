@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 class Global {
   // static const String baseUrl = "http://10.0.2.2:3000/otsuka/ediscount";
+  // static const String baseUrl = "http://103.140.207.25:3000/otsuka/ediscount";
   static const String baseUrl = "http://172.20.30.67:3000/otsuka/ediscount";
 
   static String ACCESS_TOKEN = "access_token";
@@ -20,7 +21,7 @@ class Global {
   static int GREY = 0xffD3DFEC;
   static int DARK_GREY = 0xff7E7E7E;
 
-  static const IC_WARNING = "assets/icons/ic_cancel.png";
+  static const IC_WARNING = "assets/icons/ic_warning.png";
   static const IC_CHECK = "assets/icons/ic_check.png";
   static const IC_CANCEL = "assets/icons/ic_cancel.png";
   static const IC_EMPTY = "assets/icons/ic_empty.png";
@@ -72,8 +73,11 @@ class Global {
                       style: ButtonStyle(
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(color: Color(Global.RED), width: 3)
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(
+                                  color: Color(Global.RED),
+                                  width: 3
+                              )
                           ),
                         ),
                         backgroundColor: MaterialStateProperty.all<Color>(Color(Global.WHITE)),
@@ -101,11 +105,11 @@ class Global {
                       style: ButtonStyle(
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(color: Color(Global.TOSCA))
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Color(Global.BLUE))
                           ),
                         ),
-                        backgroundColor: MaterialStateProperty.all<Color>(Color(Global.TOSCA)),
+                        backgroundColor: MaterialStateProperty.all<Color>(Color(Global.BLUE)),
                       ),
                       onPressed: action,
                       child: Text(

@@ -14,4 +14,13 @@ abstract class PDKService{
 
   @GET('/process')
   Future<ListProcessResponse> getListProcess(@Header("Authorization") String authorization);
+
+  @GET('/detail/{id}')
+  Future<DetailPDKResponse> getPDK(@Header("Authorization") String authorization, @Path('id') String id);
+
+  @POST('/approve/{id}/{det}')
+  Future<ApprovalResponse> postApprove(@Header("Authorization") String authorization, @Path('id') int id, @Path('det') int det, @Body() Map<String, dynamic> body);
+
+  @POST('/reject/{id}')
+  Future<ApprovalResponse> postReject(@Header("Authorization") String authorization, @Path('id') int id, @Body() Map<String, dynamic> body);
 }

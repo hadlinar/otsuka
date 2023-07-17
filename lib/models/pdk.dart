@@ -43,7 +43,7 @@ class PDK {
   String kode_pelanggan;
   String supplier_id;
   String maker;
-  String description;
+  String? description;
   DateTime date;
   String? user_approve_1;
   String? user_desc_1;
@@ -63,9 +63,17 @@ class PDK {
   String? user_approve_6;
   String? user_desc_6;
   DateTime? date_approve_6;
+  bool? final_status;
   String no_draft;
-  String rm_otsuka;
+  String? rm_otsuka;
   String branch;
+  String maker_name;
+  String approver_1;
+  String approver_2;
+  String approver_3;
+  String approver_4;
+  String approver_5;
+  String approver_6;
   String cust;
 
   PDK({
@@ -76,7 +84,7 @@ class PDK {
     required this.kode_pelanggan,
     required this.supplier_id,
     required this.maker,
-    required this.description,
+    this.description,
     required this.date,
     this.user_approve_1,
     this.user_desc_1,
@@ -96,11 +104,21 @@ class PDK {
     this.user_approve_6,
     this.user_desc_6,
     this.date_approve_6,
+    this.final_status,
     required this.no_draft,
-    required this.rm_otsuka,
+    this.rm_otsuka,
     required this.branch,
+    required this.maker_name,
+    required this.approver_1,
+    required this.approver_2,
+    required this.approver_3,
+    required this.approver_4,
+    required this.approver_5,
+    required this.approver_6,
     required this.cust
   });
+
+
 
   factory PDK.fromJson(Map<String, dynamic> json) => _$PDKFromJson(json);
 }
@@ -113,4 +131,54 @@ class ListProcessResponse {
   ListProcessResponse(this.message, this.result);
 
   factory ListProcessResponse.fromJson(Map<String, dynamic> json) => _$ListProcessResponseFromJson(json);
+}
+
+@JsonSerializable()
+class DetailPDK {
+  int id;
+  int id_ref;
+  String kode_barang;
+  double qty;
+  double hna;
+  double total_sales;
+  double percent_disc_rn;
+  double percent_disc_outlet;
+  double percent_disc_konversi;
+  double total_disc;
+  String prod_name;
+
+  DetailPDK({
+    required this.id,
+    required this.id_ref,
+    required this.kode_barang,
+    required this.qty,
+    required this.hna,
+    required this.total_sales,
+    required this.percent_disc_rn,
+    required this.percent_disc_outlet,
+    required this.percent_disc_konversi,
+    required this.total_disc,
+    required this.prod_name
+  });
+
+  factory DetailPDK.fromJson(Map<String, dynamic> json) => _$DetailPDKFromJson(json);
+}
+
+@JsonSerializable()
+class DetailPDKResponse {
+  String message;
+  List<DetailPDK> result;
+
+  DetailPDKResponse(this.message, this.result);
+
+  factory DetailPDKResponse.fromJson(Map<String, dynamic> json) => _$DetailPDKResponseFromJson(json);
+}
+
+@JsonSerializable()
+class ApprovalResponse {
+  String message;
+
+  ApprovalResponse(this.message);
+
+  factory ApprovalResponse.fromJson(Map<String, dynamic> json) => _$ApprovalResponseFromJson(json);
 }
