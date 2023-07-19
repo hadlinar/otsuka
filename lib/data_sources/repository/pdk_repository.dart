@@ -13,6 +13,12 @@ class PDKRepository {
     return response;
   }
 
+  Future<ListDoneResponse> getListDone(String token) async {
+    final response = await pdkService.getListDone(token);
+
+    return response;
+  }
+
   Future<DetailPDKResponse> getDetailPDK(String token, String id) async {
     final response = await pdkService.getPDK(token, id);
 

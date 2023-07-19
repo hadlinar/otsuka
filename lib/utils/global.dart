@@ -168,4 +168,65 @@ class Global {
         )
     );
   }
+
+
+  static Card getDoneCardList(String kodPel, String cabang, String cust, DateTime date, bool? status) {
+    return Card(
+        elevation: 0,
+        shadowColor: const Color(0xffBCBCBC),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Container(
+            padding: const EdgeInsets.only(left: 12, top: 7),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(cust, style: Global.getCustomFont(BLACK, 14, 'medium')),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(kodPel, style: Global.getCustomFont(DARK_GREY, 14, 'book')),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text("CABANG ${cabang}", style: Global.getCustomFont(DARK_GREY, 14, 'book')),
+                  ),
+                ),
+
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 7),
+                    padding: const EdgeInsets.all(5),
+                    // width: status == null ? 82 : (status ? 78 : 71),
+                    decoration: BoxDecoration(
+                      color: status == null ? const Color(0xffFFCC01) : (status ? const Color(0xff27A22B) : const Color(0xffF50206)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(status == null ? "Processed" : (status ? "Approved" : "Rejected"), style: Global.getCustomFont(WHITE, 13, 'book')),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 8, right: 10),
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(DateFormat('d MMM yyyy').format(date), style: Global.getCustomFont(DARK_GREY, 14, 'book')),
+                  ),
+                ),
+              ],
+            )
+        )
+    );
+  }
 }

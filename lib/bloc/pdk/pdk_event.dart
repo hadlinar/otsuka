@@ -6,6 +6,8 @@ abstract class PDKBlocEvent{}
 
 class GetProcessPDKEvent extends PDKBlocEvent{}
 
+class GetDonePDKEvent extends PDKBlocEvent{}
+
 class GetDetailPDKEvent extends PDKBlocEvent{
   String id;
 

@@ -22,6 +22,9 @@ class PDKBloc extends Bloc<PDKBlocEvent, PDKBlocState> {
     if(event is GetProcessPDKEvent) {
       yield* _getProgressToState(event);
     }
+    if(event is GetDonePDKEvent) {
+      yield* _getDoneToState(event);
+    }
     if(event is GetDetailPDKEvent) {
       yield* _getDetailToState(event);
     }
@@ -41,6 +44,24 @@ class PDKBloc extends Bloc<PDKBlocEvent, PDKBlocState> {
       final response = await _PDKRepository.getListProcess("Bearer $token");
       if(response.message == "ok") {
         yield GetListProcessState(response.result);
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 500) {
+        yield FailedPDKState();
+      } else if (e.response?.statusCode == 504) {
+        yield NotLoggedInPDKState();
+      }
+    }
+  }
+
+  Stream<PDKBlocState> _getDoneToState(GetDonePDKEvent e) async* {
+    yield LoadingPDKState();
+    final token = _sharedPreferences.getString("access_token");
+
+    try {
+      final response = await _PDKRepository.getListDone("Bearer $token");
+      if(response.message == "ok") {
+        yield GetListDoneState(response.result);
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 500) {

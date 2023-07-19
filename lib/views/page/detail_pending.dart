@@ -139,7 +139,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                             Container(
                                               padding: const EdgeInsets.all(4),
                                               child: Text(
-                                                  widget.pdk.maker,
+                                                  widget.pdk.maker_name,
                                                   style: Global.getCustomFont(Global.BLACK, 13, 'book')
                                               ),
                                             )
