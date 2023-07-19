@@ -24,6 +24,7 @@ class DetailDonePDK extends StatefulWidget {
 
 class _DetailDonePDKPage extends State<DetailDonePDK> {
   late List<DetailPDK> detailPDK = [];
+  late List<double> disc = [0];
 
   final currencyFormatter = NumberFormat('#,##0', 'ID');
 
@@ -165,7 +166,14 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                   if(state is GetDetailState) {
                     setState(() {
                       detailPDK = state.getPDKDetail;
+                      for(int i = 0; i < detailPDK.length; i++) {
+                        disc.add(detailPDK[i].total_disc);
+                      }
+                      disc.sort();
                     });
+                    print(disc);
+                    print(disc.length);
+                    print(disc[disc.length-1]);
                   }
                   else {
                     Container();
@@ -176,7 +184,8 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                       margin: const EdgeInsets.only(top: 13, left: 19, right: 19, bottom: 13),
                       child: Column(
                         children: [
-                          widget.pdk.final_status != null ? SizedBox(
+                          //status
+                          SizedBox(
                               width: MediaQuery.of(context).size.width / 1.1,
                               child: Card(
                                   color: Colors.white,
@@ -202,14 +211,14 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
                                                           "Register No.",
-                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                       ),
                                                     ),
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          widget.pdk.no_register!,
-                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                          widget.pdk.no_register ?? "-",
+                                                          style: Global.getCustomFont(Global.BLACK, 13, 'bold')
                                                       ),
                                                     )
                                                   ]
@@ -220,17 +229,17 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
                                                           "Status",
-                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                       ),
                                                     ),
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          widget.pdk.final_status == false ? "Rejected" : "Approved",
+                                                          widget.pdk.final_status != null ? (widget.pdk.final_status != false ? "Approved" : "Rejected") : "Processed",
                                                           style: TextStyle(
-                                                            color: widget.pdk.final_status == false ? const Color(0xffF50206) : const Color(0xff27A22B),
+                                                            color: widget.pdk.final_status != null ? (widget.pdk.final_status != false ? const Color(0xff27A22B) : const Color(0xffF50206)) : const Color(0xffFFCC01),
                                                             fontSize: 13,
-                                                            fontFamily: 'book'
+                                                            fontFamily: 'bold'
                                                           )
                                                       ),
                                                     )
@@ -243,7 +252,8 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                     ),
                                   )
                               )
-                          ) : Container(),
+                          ),
+
                           SizedBox(
                               width: MediaQuery.of(context).size.width / 1.1,
                               child: Card(
@@ -363,7 +373,8 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                               )
                           ),
 
-                          SizedBox(
+                          // approver 1
+                          widget.pdk.user_approve_1 != null ? SizedBox(
                               width: MediaQuery.of(context).size.width / 1.1,
                               child: Card(
                                 color: Colors.white,
@@ -396,8 +407,13 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     Container(
                                                       padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                       child: Text(
-                                                          widget.pdk.approver_1 != "null" && widget.pdk.approver_2 != "null" && widget.pdk.final_status != false ? "Approved" : "Rejected",
-                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                          widget.pdk.user_approve_2 != null ? "Approved" : (widget.pdk.final_status == false && widget.pdk.final_status != true ? "Rejected" : "Pending"),
+                                                          style: TextStyle(
+                                                            color: widget.pdk.user_approve_2 != null ? const Color(0xff27A22B) : (widget.pdk.final_status == false && widget.pdk.final_status != true ? const Color(0xffF50206) :const Color(0xffFFCC01)),
+                                                            fontFamily: 'book',
+                                                            fontSize: 13,
+                                                          )
+                                                          // Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                       ),
                                                     ),
                                                   ]
@@ -480,8 +496,10 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                   ),
                                 ),
                               )
-                          ),
-                          SizedBox(
+                          ) : Container(),
+
+                          // approver 2
+                          widget.pdk.user_approve_2 != null ? SizedBox(
                               width: MediaQuery.of(context).size.width / 1.1,
                               child: Card(
                                 color: Colors.white,
@@ -507,11 +525,22 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     Container(
                                                       padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                       child: Text(
-                                                          "Approved by",
+                                                          "Status",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                       ),
                                                     ),
-                                                    Container()
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: Text(
+                                                          widget.pdk.user_approve_3 != null ? "Approved" : (widget.pdk.final_status == false && widget.pdk.final_status != true ? "Rejected" : "Pending"),
+                                                          style: TextStyle(
+                                                            color: widget.pdk.user_approve_3 != null ? const Color(0xff27A22B) : (widget.pdk.final_status == false && widget.pdk.final_status != true ? const Color(0xffF50206) :const Color(0xffFFCC01)),
+                                                            fontFamily: 'book',
+                                                            fontSize: 13,
+                                                          )
+                                                        // Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
                                                   ]
                                               ),
                                               TableRow(
@@ -591,8 +620,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                   ),
                                 ),
                               )
-                          ),
-                          SizedBox(
+                          ) : (widget.pdk.final_status != false ? SizedBox(
                               width: MediaQuery.of(context).size.width / 1.1,
                               child: Card(
                                 color: Colors.white,
@@ -618,11 +646,94 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     Container(
                                                       padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                       child: Text(
-                                                          "Approved by",
+                                                          "Status",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                       ),
                                                     ),
-                                                    Container()
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: const Text(
+                                                          "Pending",
+                                                          style: TextStyle(
+                                                            color: Color(0xffFFCC01),
+                                                            fontFamily: 'book',
+                                                            fontSize: 13,
+                                                          )
+                                                        // Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
+                                                  ]
+                                              ),
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          "Otsuka Indonesia (Branch)",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          " ",
+                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                      ),
+                                                    )
+                                                  ]
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                          ) : Container()),
+
+                          // approver 3
+                          widget.pdk.user_approve_3 != null ? SizedBox(
+                              width: MediaQuery.of(context).size.width / 1.1,
+                              child: Card(
+                                color: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(7),
+                                  child: Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          child: Table(
+                                            columnWidths: const <int, TableColumnWidth> {
+                                              0: FixedColumnWidth(120),
+                                              1: FixedColumnWidth(178),
+                                            },
+                                            children: [
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: Text(
+                                                          "Status",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: Text(
+                                                          widget.pdk.user_approve_4 != null ? "Approved" : (widget.pdk.final_status == false && widget.pdk.final_status != true ? "Rejected" : "Pending"),
+                                                          style: TextStyle(
+                                                            color: widget.pdk.user_approve_4 != null ? const Color(0xff27A22B) : (widget.pdk.final_status == false && widget.pdk.final_status != true ? const Color(0xffF50206) :const Color(0xffFFCC01)),
+                                                            fontFamily: 'book',
+                                                            fontSize: 13,
+                                                          )
+                                                      ),
+                                                    ),
                                                   ]
                                               ),
                                               TableRow(
@@ -703,8 +814,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                   ),
                                 ),
                               )
-                          ),
-                          SizedBox(
+                          ) : (widget.pdk.final_status != false ? SizedBox(
                               width: MediaQuery.of(context).size.width / 1.1,
                               child: Card(
                                 color: Colors.white,
@@ -730,11 +840,95 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     Container(
                                                       padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                       child: Text(
-                                                          "Approved by",
+                                                          "Status",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                       ),
                                                     ),
-                                                    Container()
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: const Text(
+                                                          "Pending",
+                                                          style: TextStyle(
+                                                            color: Color(0xffFFCC01),
+                                                            fontFamily: 'book',
+                                                            fontSize: 13,
+                                                          )
+                                                        // Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
+                                                  ]
+                                              ),
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          "Rajawali Nusindo",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          " ",
+                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                      ),
+                                                    )
+                                                  ]
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                          ) : Container()),
+
+                          // approver 4
+                          widget.pdk.user_approve_4 != null ? SizedBox(
+                              width: MediaQuery.of(context).size.width / 1.1,
+                              child: Card(
+                                color: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(7),
+                                  child: Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          child: Table(
+                                            columnWidths: const <int, TableColumnWidth> {
+                                              0: FixedColumnWidth(120),
+                                              1: FixedColumnWidth(178),
+                                            },
+                                            children: [
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: Text(
+                                                          "Status",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: Text(
+                                                          widget.pdk.user_approve_5 != null ? "Approved" : (widget.pdk.final_status == false && widget.pdk.final_status != true ? "Rejected" : "Pending"),
+                                                          style: TextStyle(
+                                                            color: widget.pdk.user_approve_5 != null ? const Color(0xff27A22B) : (widget.pdk.final_status == false && widget.pdk.final_status != true ? const Color(0xffF50206) :const Color(0xffFFCC01)),
+                                                            fontFamily: 'book',
+                                                            fontSize: 13,
+                                                          )
+                                                        // Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
                                                   ]
                                               ),
                                               TableRow(
@@ -814,8 +1008,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                   ),
                                 ),
                               )
-                          ),
-                          SizedBox(
+                          ) : (widget.pdk.final_status == false ? Container() : SizedBox(
                               width: MediaQuery.of(context).size.width / 1.1,
                               child: Card(
                                 color: Colors.white,
@@ -841,11 +1034,94 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     Container(
                                                       padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                       child: Text(
-                                                          "Approved by",
+                                                          "Status",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                       ),
                                                     ),
-                                                    Container()
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: const Text(
+                                                          "Pending",
+                                                          style: TextStyle(
+                                                            color: Color(0xffFFCC01),
+                                                            fontFamily: 'book',
+                                                            fontSize: 13,
+                                                          )
+                                                      ),
+                                                    ),
+                                                  ]
+                                              ),
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          "Otsuka Indonesia (HO)",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          " ",
+                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                      ),
+                                                    )
+                                                  ]
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                          ) ),
+
+                          // approver 5
+                          widget.pdk.user_approve_5 != null ? SizedBox(
+                              width: MediaQuery.of(context).size.width / 1.1,
+                              child: Card(
+                                color: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(7),
+                                  child: Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          child: Table(
+                                            columnWidths: const <int, TableColumnWidth> {
+                                              0: FixedColumnWidth(120),
+                                              1: FixedColumnWidth(178),
+                                            },
+                                            children: [
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: Text(
+                                                          "Status",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: Text(
+                                                          widget.pdk.user_approve_6 != null && widget.pdk.final_status != true ? "Approved" : (widget.pdk.final_status == false && widget.pdk.final_status != true ? "Rejected" : "Pending"),
+                                                          style: TextStyle(
+                                                            color: widget.pdk.user_approve_6 != null ? const Color(0xff27A22B) : (widget.pdk.final_status == false && widget.pdk.final_status != true ? const Color(0xffF50206) :const Color(0xffFFCC01)),
+                                                            fontFamily: 'book',
+                                                            fontSize: 13,
+                                                          )
+                                                        // Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
                                                   ]
                                               ),
                                               TableRow(
@@ -926,8 +1202,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                   ),
                                 ),
                               )
-                          ),
-                          SizedBox(
+                          ) : (widget.pdk.final_status != false ? SizedBox(
                               width: MediaQuery.of(context).size.width / 1.1,
                               child: Card(
                                 color: Colors.white,
@@ -953,11 +1228,94 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     Container(
                                                       padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                       child: Text(
-                                                          "Approved by",
+                                                          "Status",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                       ),
                                                     ),
-                                                    Container()
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: const Text(
+                                                          "Pending",
+                                                          style: TextStyle(
+                                                            color: Color(0xffFFCC01),
+                                                            fontFamily: 'book',
+                                                            fontSize: 13,
+                                                          )
+                                                      ),
+                                                    ),
+                                                  ]
+                                              ),
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          "Otsuka Indonesia (HO)",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          " ",
+                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                      ),
+                                                    )
+                                                  ]
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                          ) : Container()),
+
+                          // approver 6
+                          disc[disc.length-1] >= 26.0 ? (widget.pdk.user_approve_6 != null && widget.pdk.final_status != null ? SizedBox(
+                              width: MediaQuery.of(context).size.width / 1.1,
+                              child: Card(
+                                color: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(7),
+                                  child: Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          child: Table(
+                                            columnWidths: const <int, TableColumnWidth> {
+                                              0: FixedColumnWidth(120),
+                                              1: FixedColumnWidth(178),
+                                            },
+                                            children: [
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: Text(
+                                                          "Status",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: Text(
+                                                          widget.pdk.user_approve_6 != null && widget.pdk.final_status != false ? "Approved" : "Rejected",
+                                                          style: TextStyle(
+                                                            color: widget.pdk.final_status == false ? const Color(0xffF50206) : const Color(0xff27A22B),
+                                                            fontFamily: 'book',
+                                                            fontSize: 13,
+                                                          )
+                                                        // Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
                                                   ]
                                               ),
                                               TableRow(
@@ -1038,7 +1396,76 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                   ),
                                 ),
                               )
-                          ),
+                          ) : SizedBox(
+                              width: MediaQuery.of(context).size.width / 1.1,
+                              child: Card(
+                                color: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(7),
+                                  child: Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          child: Table(
+                                            columnWidths: const <int, TableColumnWidth> {
+                                              0: FixedColumnWidth(120),
+                                              1: FixedColumnWidth(178),
+                                            },
+                                            children: [
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: Text(
+                                                          "Status",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: const Text(
+                                                          "Pending",
+                                                          style: TextStyle(
+                                                            color: Color(0xffFFCC01),
+                                                            fontFamily: 'book',
+                                                            fontSize: 13,
+                                                          )
+                                                      ),
+                                                    ),
+                                                  ]
+                                              ),
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          "Otsuka Indonesia (HO)",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          " ",
+                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                      ),
+                                                    )
+                                                  ]
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                          )) : Container(),
 
                           ListView.builder(
                               itemCount: detailPDK?.length,

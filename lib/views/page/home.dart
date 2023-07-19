@@ -251,6 +251,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                                                 Navigator.of(ctx).pop();
                                                                 BlocProvider.of<UserBloc>(context).add(GetUserEvent());
                                                                 BlocProvider.of<PDKBloc>(context).add(GetProcessPDKEvent());
+                                                                BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent());
                                                               }
                                                             },
                                                           )
