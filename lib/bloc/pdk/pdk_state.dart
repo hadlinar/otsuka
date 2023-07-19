@@ -39,6 +39,12 @@ class GetListProcessState extends PDKBlocState{
   GetListProcessState(this.getListProcess);
 }
 
+class GetListDoneState extends PDKBlocState{
+  List<PDK> getListDone;
+
+  GetListDoneState(this.getListDone);
+}
+
 class GetDetailState extends PDKBlocState{
   List<DetailPDK> getPDKDetail;
 

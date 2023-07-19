@@ -13,6 +13,7 @@ import '../../bloc/pdk/pdk_bloc.dart';
 import '../../bloc/user/user_state.dart';
 import '../../models/pdk.dart';
 import '../../models/user.dart';
+import 'detail_done.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -26,12 +27,14 @@ final GlobalState store = GlobalState.instance;
 class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   List<PDK> pdk = [];
+  List<PDK> donePdk = [];
 
   @override
   void initState() {
     super.initState();
     BlocProvider.of<UserBloc>(context).add(GetUserEvent());
     BlocProvider.of<PDKBloc>(context).add(GetProcessPDKEvent());
+    BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent());
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -167,17 +170,25 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                 ),
                                 labelColor: Colors.white,
                                 unselectedLabelColor: Colors.black,
-                                tabs: [
+                                tabs: const [
                                   Tab(
                                       child: Text(
                                         "Pending",
-                                        style: Global.getCustomFont(Global.BLACK, 14, 'book'),
+                                        // style: Global.getCustomFont(Global.BLACK, 14, 'book'),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontFamily: 'book'
+                                        ),
                                       )
                                   ),
                                   Tab(
                                       child: Text(
-                                        "Approved",
-                                        style: Global.getCustomFont(Global.BLACK, 14, 'book'),
+                                        "Processed",
+                                        // style: Global.getCustomFont(Global.BLACK, 14, 'book'),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'book'
+                                        ),
                                       )
                                   )
                                 ],
@@ -202,6 +213,11 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                   else if (state is GetListProcessState) {
                                     setState(() {
                                       pdk = state.getListProcess;
+                                    });
+                                  }
+                                  else if (state is GetListDoneState) {
+                                    setState(() {
+                                      donePdk = state.getListDone;
                                     });
                                   }
                                   else if (state is FailedPDKState) {
@@ -267,14 +283,49 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                           ),
                                         ],
                                       ),
-                                      Center(
-                                        child: Text(
-                                          'approved',
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w600,
+                                      Column(
+                                        children: [
+                                          Expanded(
+                                              child: donePdk.isNotEmpty ? Container(
+                                                margin: const EdgeInsets.only(bottom: 7),
+                                                child: ListView.builder(
+                                                  itemCount: donePdk.length,
+                                                  scrollDirection: Axis.vertical,
+                                                  shrinkWrap: true,
+                                                  itemBuilder: (context, i) {
+                                                    return InkWell(
+                                                      onTap: (){
+                                                        Navigator.push(context, MaterialPageRoute(
+                                                            builder: (context) => DetailDonePDK(donePdk[i], state.getUser)
+                                                        ));
+                                                      },
+                                                      child: Global.getDoneCardList(donePdk[i].kode_pelanggan, donePdk[i].branch, donePdk[i].cust, donePdk[i].date, donePdk[i].final_status),
+                                                    );
+                                                  },
+                                                ),
+                                              ) : Container(
+                                                  child: Center(
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        children: [
+                                                          Image.asset(
+                                                              Global.IC_EMPTY,
+                                                              height: 68
+                                                          ),
+                                                          Container(
+                                                            padding: const EdgeInsets.only(top:10),
+                                                            child: Text(
+                                                              "No PDK Approved",
+                                                              style: Global.getCustomFont(0xffC1C2C3, 15, 'medium'),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      )
+                                                  )
+                                              )
                                           ),
-                                        ),
+                                        ],
                                       ),
                                     ],
                                   ),

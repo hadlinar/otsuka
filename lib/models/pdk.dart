@@ -134,6 +134,16 @@ class ListProcessResponse {
 }
 
 @JsonSerializable()
+class ListDoneResponse {
+  String message;
+  List<PDK> result;
+
+  ListDoneResponse(this.message, this.result);
+
+  factory ListDoneResponse.fromJson(Map<String, dynamic> json) => _$ListDoneResponseFromJson(json);
+}
+
+@JsonSerializable()
 class DetailPDK {
   int id;
   int id_ref;

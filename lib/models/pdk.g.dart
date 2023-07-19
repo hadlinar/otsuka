@@ -117,6 +117,20 @@ Map<String, dynamic> _$ListProcessResponseToJson(
       'result': instance.result,
     };
 
+ListDoneResponse _$ListDoneResponseFromJson(Map<String, dynamic> json) =>
+    ListDoneResponse(
+      json['message'] as String,
+      (json['result'] as List<dynamic>)
+          .map((e) => PDK.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$ListDoneResponseToJson(ListDoneResponse instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+      'result': instance.result,
+    };
+
 DetailPDK _$DetailPDKFromJson(Map<String, dynamic> json) => DetailPDK(
       id: json['id'] as int,
       id_ref: json['id_ref'] as int,
