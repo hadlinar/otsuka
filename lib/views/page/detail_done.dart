@@ -171,9 +171,6 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                       }
                       disc.sort();
                     });
-                    print(disc);
-                    print(disc.length);
-                    print(disc[disc.length-1]);
                   }
                   else {
                     Container();

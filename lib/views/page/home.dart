@@ -1,6 +1,7 @@
 import 'package:ediscount/bloc/user/user_bloc.dart';
 import 'package:ediscount/views/page/detail_pending.dart';
 import 'package:ediscount/views/page/login.dart';
+import 'package:ediscount/views/page/profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -126,7 +127,10 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                           },
                           onSelected:(value){
                             if(value == 0){
-                              print("profile");
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => ProfilePage(
+                                    state.getUser
+                              ));
                             }
                             if(value == 1) {
                               showDialog(
