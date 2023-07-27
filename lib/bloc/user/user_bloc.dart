@@ -13,10 +13,8 @@ export 'user_bloc.dart';
 
 class UserBloc extends Bloc<UserEvent, UserBlocState> {
   final UserRepository _userRepository;
-  // final LogoutRepository _logoutRepository;
   final SharedPreferences _sharedPreferences;
 
-  // static create(UserRepository userRepository, LogoutRepository logoutRepository, SharedPreferences sharedPreferences) => UserBloc(userRepository, logoutRepository, sharedPreferences);
   static create(UserRepository userRepository, SharedPreferences sharedPreferences) => UserBloc(userRepository, sharedPreferences);
 
   UserBloc(this._userRepository, this._sharedPreferences) : super(LoadingUserState());
