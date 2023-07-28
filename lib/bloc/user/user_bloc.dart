@@ -27,6 +27,12 @@ class UserBloc extends Bloc<UserEvent, UserBlocState> {
     if(event is LogoutEvent) {
       yield* _logoutToState(event);
     }
+    if(event is ChangeNameEvent) {
+      yield* _changeNameToState(event);
+    }
+    if(event is ChangePasswordEvent) {
+      yield* _changePasswordToState(event);
+    }
   }
 
   Stream<UserBlocState> _mapToGetUserEvent(GetUserEvent e) async* {
@@ -62,6 +68,50 @@ class UserBloc extends Bloc<UserEvent, UserBlocState> {
         yield NotLoggedInState();
       }
       yield ServerErrorState();
+    }
+  }
+
+  Stream<UserBlocState> _changeNameToState(ChangeNameEvent e) async* {
+    yield LoadingUserState();
+    final token = _sharedPreferences.getString("access_token");
+    try {
+      final response = await _userRepository.ChangeName(
+        "Bearer $token",
+        e.name
+      );
+      if(response.message == "name has been changed") {
+        yield SuccessChangeNameState();
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 500) {
+        yield FailedUserState();
+      } else if (e.response?.statusCode == 504) {
+        yield NotLoggedInState();
+      }
+    }
+  }
+
+  Stream<UserBlocState> _changePasswordToState(ChangePasswordEvent e) async* {
+    yield LoadingUserState();
+    final token = _sharedPreferences.getString("access_token");
+    try {
+      final response = await _userRepository.changePassword(
+        "Bearer $token",
+        e.password,
+        e.newPassword,
+        e.retype
+      );
+      if(response.message == "name has been changed") {
+        yield SuccessChangeNameState();
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 403) {
+        yield WrongPasswordState();
+      } else if (e.response?.statusCode == 500) {
+        yield FailedUserState();
+      } else if (e.response?.statusCode == 420) {
+        yield PasswordNotMatchedState();
+      }
     }
   }
 }

@@ -43,6 +43,25 @@ class UserResponse {
 }
 
 @JsonSerializable()
+class ChangeNameResponse {
+  String message;
+
+  ChangeNameResponse(this.message);
+
+  factory ChangeNameResponse.fromJson(Map<String, dynamic> json) => _$ChangeNameResponseFromJson(json);
+}
+
+@JsonSerializable()
+class ChangePasswordResponse {
+  String message;
+  String token;
+
+  ChangePasswordResponse(this.message, this.token);
+
+  factory ChangePasswordResponse.fromJson(Map<String, dynamic> json) => _$ChangePasswordResponseFromJson(json);
+}
+
+@JsonSerializable()
 class LogoutResponse {
   String message;
 

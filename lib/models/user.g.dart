@@ -37,6 +37,30 @@ Map<String, dynamic> _$UserResponseToJson(UserResponse instance) =>
       'result': instance.result,
     };
 
+ChangeNameResponse _$ChangeNameResponseFromJson(Map<String, dynamic> json) =>
+    ChangeNameResponse(
+      json['message'] as String,
+    );
+
+Map<String, dynamic> _$ChangeNameResponseToJson(ChangeNameResponse instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+    };
+
+ChangePasswordResponse _$ChangePasswordResponseFromJson(
+        Map<String, dynamic> json) =>
+    ChangePasswordResponse(
+      json['message'] as String,
+      json['token'] as String,
+    );
+
+Map<String, dynamic> _$ChangePasswordResponseToJson(
+        ChangePasswordResponse instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+      'token': instance.token,
+    };
+
 LogoutResponse _$LogoutResponseFromJson(Map<String, dynamic> json) =>
     LogoutResponse(
       json['message'] as String,

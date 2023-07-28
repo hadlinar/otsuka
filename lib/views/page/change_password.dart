@@ -71,40 +71,19 @@ class _ChangePasswordPage extends State<ChangePasswordPage> {
           user = state.getUser;
         });
         streamUser.cancel();
-      } else {
-        Container();
       }
-    });
-
-    streamUser = userBloc.stream.listen((state) {
-      if(state is LoadingUserState) {
-        Container(
-          color: Colors.white,
-          child: Center(
-            child: SpinKitDoubleBounce(
-              color: Color(Global.TOSCA),
-              size: 70,
-            ),
-          ),
+      if(state is SuccessChangePasswordState) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Global.defaultModal(() {
+                Navigator.pop(context);
+                widget.successChangePasswordName!(200, context);
+              }, context, Global.IC_CHECK, "Saved", "Ok", false);
+            }
         );
       }
-      if(user == null) {
-        Container(
-          color: Colors.white,
-          child: Center(
-            child: SpinKitDoubleBounce(
-              color: Color(Global.TOSCA),
-              size: 70,
-            ),
-          ),
-        );
-      }
-      if (state is GetUserState) {
-        setState(() {
-          user = state.getUser;
-        });
-        streamUser.cancel();
-      } else {
+      else {
         Container();
       }
     });
@@ -275,7 +254,13 @@ class _ChangePasswordPage extends State<ChangePasswordPage> {
                                 backgroundColor: MaterialStateProperty.all<Color>(Color(Global.BLUE)),
                               ),
                               onPressed: () {
-                                print("save");
+                                BlocProvider.of<UserBloc>(context).add(
+                                    ChangePasswordEvent(
+                                      currentPasswordController.text,
+                                      newPasswordController.text,
+                                      retypeController.text
+                                    )
+                                );
                               },
                               child: const Text(
                                 "Save",
