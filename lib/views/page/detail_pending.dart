@@ -1262,7 +1262,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                         children: [
                                                           Text(
-                                                              "${listDiscController[i].text} %",
+                                                              "${double.parse(listDiscController[i].text)} %",
                                                               style: Global.getCustomFont(Global.BLACK, 13, 'book')
                                                           ),
                                                           widget.user?.role_id == 3 ? InkWell(
@@ -1407,7 +1407,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "${detailPDK[i].percent_disc_outlet} %",
+                                                          "${detailPDK[i].total_disc - double.parse(listDiscController[i].text) - detailPDK[i].percent_disc_konversi} %",
                                                           style: Global.getCustomFont(Global.BLACK, 13, 'book')
                                                       ),
                                                     )
@@ -1443,7 +1443,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                     Container(
                                                       padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                       child: Text(
-                                                          "${double.parse(listDiscController[i].text) + detailPDK[i].percent_disc_konversi + detailPDK[i].percent_disc_outlet} %",
+                                                          "${detailPDK[i].total_disc} %",
                                                           style: Global.getCustomFont(Global.BLACK, 13, 'bold')
                                                       ),
                                                     )

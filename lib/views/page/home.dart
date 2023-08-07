@@ -32,7 +32,10 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
   List<PDK> pdk = [];
   List<PDK> donePdk = [];
 
+  late GlobalKey<ScaffoldState> _scaffoldKey;
+
   User? user;
+  bool fromProfile = false;
 
   late UserBloc userBloc;
   late PDKBloc pdkBloc;
@@ -43,6 +46,8 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _scaffoldKey = GlobalKey();
+
     userBloc = BlocProvider.of<UserBloc>(context);
     userBloc.add(GetUserEvent());
 
@@ -115,6 +120,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
+    _scaffoldKey.currentState?.dispose();
     _tabController.dispose();
     userBloc.close();
     pdkBloc.close();
@@ -133,7 +139,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                 return Global.defaultModal(() {
                   Navigator.pop(context);
                   SystemNavigator.pop();
-                }, context, Global.IC_WARNING, "Are you sure you want to quit [the apps]?", "Yes", true);
+                }, context, Global.IC_WARNING, "Are you sure you want to quit the apps?", "Yes", true);
               }
           );
           return Future.value(true);
@@ -154,6 +160,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
           ),
         ) :
         Scaffold(
+            key: _scaffoldKey,
             backgroundColor: Color(Global.BLUE),
             appBar: AppBar(
               backgroundColor: Color(Global.BLUE),
@@ -173,7 +180,24 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                   preferredSize: const Size.fromHeight(30.0),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Container(
+                    child: fromProfile ? BlocListener<UserBloc, UserBlocState>(
+                      listener: (context, state) {
+                        if(state is GetUserState) {
+                          setState(() {
+                            user = state.getUser;
+                          });
+                        } else {
+                          Container();
+                        }
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 23, bottom: 20),
+                        child: Text(
+                            "Hello, ${user?.nama}!",
+                            style: Global.getCustomFont(Global.WHITE, 20, 'book')
+                        ),
+                      ),
+                    ) : Container(
                       margin: const EdgeInsets.only(left: 23, bottom: 20),
                       child: Text(
                           "Hello, ${user?.nama}!",
@@ -206,8 +230,17 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                       if(value == 0){
                         Navigator.push(context, MaterialPageRoute(
                             builder: (context) => ProfilePage(
-                                user
-                            )));
+                              user,
+                              reloadPage: (int resMessage, BuildContext ctx, bool fromProf) {
+                                if (resMessage == 200 && fromProf) {
+                                  setState(() {
+                                    fromProfile = fromProf;
+                                  });
+                                  BlocProvider.of<UserBloc>(context).add(GetUserEvent());
+                                }
+                              },
+                            )
+                        ));
                       }
                       if(value == 1) {
                         showDialog(
@@ -277,125 +310,137 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                           ],
                         ),
                       ),
-                      // BlocListener<PDKBloc, PDKBlocState>(
-                      //     listener: (context, state) {
-                      //       print("home pdk $state");
-                      //       if (state is GetListDoneState) {
-                      //         setState(() {
-                      //           donePdk = state.getListDone;
-                      //         });
-                      //       }
-                      //       if (state is FailedPDKState) {
-                      //         Login();
-                      //       }
-                      //       else {
-                      //         Container();
-                      //       }
-                      //     },
-                      //     child:
                       Expanded(
                         child: TabBarView(
                           controller: _tabController,
                           children: [
-                            Column(
+                            RefreshIndicator(
+                                color: Color(Global.TOSCA),
+                                backgroundColor: Colors.white,
+                                child: Column(
                               children: [
                                 Expanded(
-                                    child: pdk.isNotEmpty ? ListView.builder(
-                                      itemCount: pdk.length,
-                                      scrollDirection: Axis.vertical,
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, i) {
-                                        final detailPage = DetailPendingPDK(
-                                          pdk[i],
-                                          user,
-                                          successPostPDK: (int resMessage, BuildContext ctx) {
-                                            if (resMessage == 200) {
-                                              Navigator.of(ctx).pop();
-                                              Navigator.of(ctx).pop();
-                                              BlocProvider.of<UserBloc>(context).add(GetUserEvent());
-                                              BlocProvider.of<PDKBloc>(context).add(GetProcessPDKEvent());
-                                              BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent());
-                                            }
-                                          },
-                                        );
-                                        return InkWell(
-                                          onTap: (){
-                                            Navigator.push(context, MaterialPageRoute(
-                                                builder: (context) => detailPage
-                                            ));
-                                          },
-                                          child: Global.getCardList(pdk[i].kode_pelanggan, pdk[i].branch, pdk[i].cust, pdk[i].date),
-                                        );
-                                      },
-                                    ) : Container(
-                                        child: Center(
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Image.asset(
-                                                    Global.IC_EMPTY,
-                                                    height: 68
-                                                ),
-                                                Container(
-                                                  padding: const EdgeInsets.only(top:10),
-                                                  child: Text(
-                                                    "No pending PDK",
-                                                    style: Global.getCustomFont(0xffC1C2C3, 15, 'medium'),
-                                                  ),
-                                                )
-                                              ],
-                                            )
-                                        )
-                                    )
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Expanded(
-                                    child: donePdk.isNotEmpty ? Container(
-                                      margin: const EdgeInsets.only(bottom: 7),
-                                      child: ListView.builder(
-                                        itemCount: donePdk.length,
-                                        scrollDirection: Axis.vertical,
-                                        shrinkWrap: true,
-                                        itemBuilder: (context, i) {
-                                          final donePage = DetailDonePDK(donePdk[i], user!);
-                                          return InkWell(
-                                            onTap: (){
-                                              Navigator.push(context, MaterialPageRoute(
-                                                  builder: (context) => donePage
-                                              ));
-                                            },
-                                            child: Global.getDoneCardList(donePdk[i].kode_pelanggan, donePdk[i].branch, donePdk[i].cust, donePdk[i].date, donePdk[i].final_status),
-                                          );
+                                  child: pdk.isNotEmpty ? ListView.builder(
+                                    itemCount: pdk.length,
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, i) {
+                                      final detailPage = DetailPendingPDK(
+                                        pdk[i],
+                                        user,
+                                        successPostPDK: (int resMessage, BuildContext ctx) {
+                                          if (resMessage == 200) {
+                                            Navigator.of(ctx).pop();
+                                            Navigator.of(ctx).pop();
+                                            BlocProvider.of<UserBloc>(context).add(GetUserEvent());
+                                            BlocProvider.of<PDKBloc>(context).add(GetProcessPDKEvent());
+                                            BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent());
+                                          }
                                         },
-                                      ),
-                                    ) : Container(
-                                        child: Center(
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Image.asset(
-                                                    Global.IC_EMPTY,
-                                                    height: 68
+                                      );
+                                      return InkWell(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(
+                                              builder: (context) => detailPage
+                                          ));
+                                        },
+                                        child: Global.getCardList(pdk[i].kode_pelanggan, pdk[i].branch, pdk[i].cust, pdk[i].date),
+                                      );
+                                    },
+                                  ) : Container(
+                                      child: Center(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                  Global.IC_EMPTY,
+                                                  height: 68
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.only(top:10),
+                                                child: Text(
+                                                  "No pending PDK",
+                                                  style: Global.getCustomFont(0xffC1C2C3, 15, 'medium'),
                                                 ),
-                                                Container(
-                                                  padding: const EdgeInsets.only(top:10),
-                                                  child: Text(
-                                                    "No PDK Approved",
-                                                    style: Global.getCustomFont(0xffC1C2C3, 15, 'medium'),
-                                                  ),
-                                                )
-                                              ],
-                                            )
-                                        )
-                                    )
+                                              )
+                                            ],
+                                          )
+                                      )
+                                  ),
                                 ),
                               ],
                             ),
+                                onRefresh: () {
+                                  return Future.delayed(
+                                    const Duration(seconds: 2),
+                                    () {
+                                      setState(() {
+                                        BlocProvider.of<UserBloc>(context).add(GetUserEvent());
+                                      });
+                                    }
+                                  );
+                                }
+                            ),
+                            RefreshIndicator(
+                              color: Color(Global.TOSCA),
+                              backgroundColor: Colors.white,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                      child: donePdk.isNotEmpty ? Container(
+                                        margin: const EdgeInsets.only(bottom: 7),
+                                        child: ListView.builder(
+                                          itemCount: donePdk.length,
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, i) {
+                                            final donePage = DetailDonePDK(donePdk[i], user!);
+                                            return InkWell(
+                                              onTap: (){
+                                                Navigator.push(context, MaterialPageRoute(
+                                                    builder: (context) => donePage
+                                                ));
+                                              },
+                                              child: Global.getDoneCardList(donePdk[i].kode_pelanggan, donePdk[i].branch, donePdk[i].cust, donePdk[i].date, donePdk[i].final_status),
+                                            );
+                                          },
+                                        ),
+                                      ) : Container(
+                                          child: Center(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Image.asset(
+                                                      Global.IC_EMPTY,
+                                                      height: 68
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets.only(top:10),
+                                                    child: Text(
+                                                      "No PDK Approved",
+                                                      style: Global.getCustomFont(0xffC1C2C3, 15, 'medium'),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                          )
+                                      )
+                                  ),
+                                ],
+                              ),
+                              onRefresh: () {
+                                return Future.delayed(
+                                  const Duration(seconds: 2),
+                                  () {
+                                    setState(() {
+                                      BlocProvider.of<UserBloc>(context).add(GetUserEvent());
+                                    });
+                                  }
+                                );
+                              },
+                            )
                           ],
                         ),
                       )

@@ -23,7 +23,7 @@ class ChangeNamePage extends StatefulWidget {
   }
 }
 
-typedef SuccessEditName = void Function(int resultMessage, BuildContext context);
+typedef SuccessEditName = void Function(int resultMessage, BuildContext context, bool flg);
 
 class _ChangeNamePage extends State<ChangeNamePage> {
   User? user;
@@ -37,6 +37,7 @@ class _ChangeNamePage extends State<ChangeNamePage> {
   @override
   void initState() {
     super.initState();
+    widget.successEditName!(400, context, false);
     userBloc = BlocProvider.of<UserBloc>(context);
     userBloc.add(GetUserEvent());
 
@@ -69,17 +70,6 @@ class _ChangeNamePage extends State<ChangeNamePage> {
         });
         streamUser.cancel();
       }
-      if(state is SuccessChangeNameState) {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return Global.defaultModal(() {
-                Navigator.pop(context);
-                widget.successEditName!(200, context);
-              }, context, Global.IC_CHECK, "Saved", "Ok", false);
-            }
-        );
-      }
       else {
         Container();
       }
@@ -95,50 +85,68 @@ class _ChangeNamePage extends State<ChangeNamePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-                gradient: SweepGradient(
-                  colors: [Color(Global.TOSCA), Color(Global.BLUE)],
-                  stops: [0, 1],
-                  center: Alignment.bottomLeft,
-                )
+    return GestureDetector (
+        onTap: () {
+      FocusScope.of(context).requestFocus(FocusNode());
+    },
+    child: BlocListener<UserBloc, UserBlocState>(
+      listener: (context, state) {
+        print(state.toString());
+        if(state is SuccessChangeNameState) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Global.defaultModal(() {
+                  widget.successEditName!(200, context, true);
+                }, context, Global.IC_CHECK, "Saved", "Ok", false);
+              }
+          );
+        }
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                  gradient: SweepGradient(
+                    colors: [Color(Global.TOSCA), Color(Global.BLUE)],
+                    stops: [0, 1],
+                    center: Alignment.bottomLeft,
+                  )
+              ),
+            ),
+            leading: IconButton(
+              onPressed: Navigator.of(context).pop,
+              icon: Icon(
+                Icons.arrow_back_rounded,
+                color: Color(Global.WHITE),
+                size: 25.0,
+              ),
+            ),
+            title: Text(
+                "Change Name",
+                style: Global.getCustomFont(Global.WHITE, 15, 'medium')
             ),
           ),
-          leading: IconButton(
-            onPressed: Navigator.of(context).pop,
-            icon: Icon(
-              Icons.arrow_back_rounded,
-              color: Color(Global.WHITE),
-              size: 25.0,
-            ),
-          ),
-          title: Text(
-              "Change Name",
-              style: Global.getCustomFont(Global.WHITE, 15, 'medium')
-          ),
-        ),
-        body: Container(
-          color: Color(Global.BACKGROUND),
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 13),
-          child: Column(
-            children: [
-              SizedBox(
-                  child: Card(
-                      color: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
+          body: Container(
+            color: Color(Global.BACKGROUND),
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 13),
+            child: Column(
+              children: [
+                SizedBox(
+                    child: Card(
+                        color: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
                                 padding: const EdgeInsets.only(left: 10, top: 7, bottom: 7, right: 10),
                                 child: TextFormField(
                                   style: Global.getCustomFont(Global.BLACK, 13, 'book'),
@@ -155,87 +163,89 @@ class _ChangeNamePage extends State<ChangeNamePage> {
                                         borderSide: BorderSide()),
                                   ),
                                 ),
-                            ),
-                          ],
-                        ),
-                      )
-                  )
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                  padding: const EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
-                  margin: const EdgeInsets.only(bottom: 5),
-                  // color: Colors.white,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 93,
-                          child: ElevatedButton(
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide(
-                                          color: Color(Global.RED),
-                                          width: 3
-                                      )
-                                  ),
-                                ),
-                                backgroundColor: MaterialStateProperty.all<Color>(Color(Global.WHITE)),
                               ),
-                              onPressed: Navigator.of(context).pop,
-                              child: Text(
-                                "Cancel",
-                                style: TextStyle(
-                                    color: Color(Global.RED),
-                                    fontFamily: 'bold',
-                                    fontSize: 13
-                                ),
-                              )
+                            ],
                           ),
-                        ),
-                        Container(
-                          width: 14,
-                        ),
-                        SizedBox(
-                          width: 93,
-                          child: ElevatedButton(
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide(color: Color(Global.BLUE))
-                                  ),
-                                ),
-                                backgroundColor: MaterialStateProperty.all<Color>(Color(Global.BLUE)),
-                              ),
-                              onPressed: () {
-                                BlocProvider.of<UserBloc>(context).add(
-                                    ChangeNameEvent(
-                                      nameController.text
-                                    )
-                                );
-                              },
-                              child: const Text(
-                                "Save",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'bold',
-                                    fontSize: 13
-                                ),
-                              )
-                          ),
-                        ),
-                      ]
-                  ),
+                        )
+                    )
                 ),
-              )
-            ],
-          ),
-        )
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 18, right: 18, top: 9, bottom: 9),
+                    margin: const EdgeInsets.only(bottom: 5),
+                    // color: Colors.white,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 93,
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(18.0),
+                                        side: BorderSide(
+                                            color: Color(Global.RED),
+                                            width: 3
+                                        )
+                                    ),
+                                  ),
+                                  backgroundColor: MaterialStateProperty.all<Color>(Color(Global.WHITE)),
+                                ),
+                                onPressed: Navigator.of(context).pop,
+                                child: Text(
+                                  "Cancel",
+                                  style: TextStyle(
+                                      color: Color(Global.RED),
+                                      fontFamily: 'bold',
+                                      fontSize: 13
+                                  ),
+                                )
+                            ),
+                          ),
+                          Container(
+                            width: 14,
+                          ),
+                          SizedBox(
+                            width: 93,
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(18.0),
+                                        side: BorderSide(color: Color(Global.BLUE))
+                                    ),
+                                  ),
+                                  backgroundColor: MaterialStateProperty.all<Color>(Color(Global.BLUE)),
+                                ),
+                                onPressed: () {
+                                  print("print");
+                                  BlocProvider.of<UserBloc>(context).add(
+                                      ChangeNameEvent(
+                                          nameController.text
+                                      )
+                                  );
+                                },
+                                child: const Text(
+                                  "Save",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'bold',
+                                      fontSize: 13
+                                  ),
+                                )
+                            ),
+                          ),
+                        ]
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+      ))
     );
   }
 }
