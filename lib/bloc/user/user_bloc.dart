@@ -75,7 +75,7 @@ class UserBloc extends Bloc<UserEvent, UserBlocState> {
     yield LoadingUserState();
     final token = _sharedPreferences.getString("access_token");
     try {
-      final response = await _userRepository.ChangeName(
+      final response = await _userRepository.changeName(
         "Bearer $token",
         e.name
       );
@@ -101,8 +101,10 @@ class UserBloc extends Bloc<UserEvent, UserBlocState> {
         e.newPassword,
         e.retype
       );
-      if(response.message == "name has been changed") {
-        yield SuccessChangeNameState();
+      if(response.message == "ok") {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString("access_token", response.token);
+        yield SuccessChangePasswordState();
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 403) {

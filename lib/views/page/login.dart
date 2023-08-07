@@ -83,6 +83,8 @@ class _LoginPage extends State<Login> {
                 return Global.defaultModal(() {
                   Navigator.pop(context);
                   Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
                 }, context, Global.IC_WARNING, "Wrong password", "Ok", false);
               }
           );

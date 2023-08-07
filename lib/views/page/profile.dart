@@ -64,9 +64,7 @@ class _ProfilePage extends State<ProfilePage> {
         );
       }
       if (state is GetUserState) {
-        setState(() {
-          user = state.getUser;
-        });
+        user = state.getUser;
         streamUser.cancel();
       } else {
         Container();

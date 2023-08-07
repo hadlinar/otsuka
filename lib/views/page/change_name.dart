@@ -10,6 +10,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../models/user.dart';
 import '../../utils/global.dart';
 import '../../widget/customer_text_field.dart';
+import 'home.dart';
 
 class ChangeNamePage extends StatefulWidget {
   late String name;
@@ -37,7 +38,6 @@ class _ChangeNamePage extends State<ChangeNamePage> {
   @override
   void initState() {
     super.initState();
-    widget.successEditName!(400, context, false);
     userBloc = BlocProvider.of<UserBloc>(context);
     userBloc.add(GetUserEvent());
 
@@ -91,13 +91,14 @@ class _ChangeNamePage extends State<ChangeNamePage> {
     },
     child: BlocListener<UserBloc, UserBlocState>(
       listener: (context, state) {
-        print(state.toString());
         if(state is SuccessChangeNameState) {
           showDialog(
               context: context,
               builder: (BuildContext context) {
                 return Global.defaultModal(() {
-                  widget.successEditName!(200, context, true);
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => Home()
+                  ));
                 }, context, Global.IC_CHECK, "Saved", "Ok", false);
               }
           );
@@ -221,7 +222,6 @@ class _ChangeNamePage extends State<ChangeNamePage> {
                                   backgroundColor: MaterialStateProperty.all<Color>(Color(Global.BLUE)),
                                 ),
                                 onPressed: () {
-                                  print("print");
                                   BlocProvider.of<UserBloc>(context).add(
                                       ChangeNameEvent(
                                           nameController.text

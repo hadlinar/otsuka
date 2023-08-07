@@ -1377,30 +1377,31 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                     )
                                                   ]
                                               ),
+                                              // TableRow(
+                                              //     children: [
+                                              //       Container(
+                                              // padding: const EdgeInsets.only(top:4, right: 4, bottom: 4, left: 20),
+                                              //         padding: const EdgeInsets.all(4),
+                                              //         child: Text(
+                                              //             "Otsuka Indonesia",
+                                              //             style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                              //         ),
+                                              //       ),
+                                              //       Container(
+                                              //         padding: const EdgeInsets.all(4),
+                                              //         child: Text(
+                                              //             "",
+                                              //             style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                              //         ),
+                                              //       )
+                                              //     ]
+                                              // ),
                                               TableRow(
                                                   children: [
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "Otsuka Indonesia",
-                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      padding: const EdgeInsets.all(4),
-                                                      child: Text(
-                                                          "",
-                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
-                                                      ),
-                                                    )
-                                                  ]
-                                              ),
-                                              TableRow(
-                                                  children: [
-                                                    Container(
-                                                      padding: const EdgeInsets.only(top:4, right: 4, bottom: 4, left: 20),
-                                                      child: Text(
-                                                          "Outlet",
+                                                          "Otsuka Discount Load",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                       ),
                                                     ),
@@ -1416,7 +1417,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                               TableRow(
                                                   children: [
                                                     Container(
-                                                      padding: const EdgeInsets.only(top:4, right: 4, bottom: 4, left: 20),
+                                                      padding: const EdgeInsets.all(4),
                                                       child: Text(
                                                           "Goods Bonus Conversion",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')

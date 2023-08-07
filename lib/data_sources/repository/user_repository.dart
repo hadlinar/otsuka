@@ -20,13 +20,13 @@ class UserRepository {
   Future<ChangePasswordResponse> changePassword(String token, String password, String newPass, String retype) async {
     final response = await userService.changePassword(token, {
       "password": password,
-      "newPass": newPass,
+      "newPassword": newPass,
       "retype": retype
     });
     return response;
   }
 
-  Future<ChangeNameResponse> ChangeName(String token, String name) async {
+  Future<ChangeNameResponse> changeName(String token, String name) async {
     final response = await userService.changeName(token, {
       "name": name
     });
