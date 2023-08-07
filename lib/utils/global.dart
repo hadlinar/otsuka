@@ -6,8 +6,8 @@ import 'package:intl/intl.dart';
 
 class Global {
   // static const String baseUrl = "http://10.0.2.2:3000/otsuka/ediscount";
-  // static const String baseUrl = "http://103.140.207.25:3000/otsuka/ediscount";
-  static const String baseUrl = "http://172.20.30.67:3000/otsuka/ediscount";
+  static const String baseUrl = "http://103.140.207.25:3000/otsuka/ediscount";
+  // static const String baseUrl = "http://172.20.30.67:3000/otsuka/ediscount";
 
   static String ACCESS_TOKEN = "access_token";
 
@@ -20,6 +20,7 @@ class Global {
   static int GREEN = 0xff36C238;
   static int GREY = 0xffD3DFEC;
   static int DARK_GREY = 0xff7E7E7E;
+  static int YELLOW = 0xffFFCC01;
 
   static const IC_WARNING = "assets/icons/ic_warning.png";
   static const IC_CHECK = "assets/icons/ic_check.png";
@@ -210,7 +211,7 @@ class Global {
                     padding: const EdgeInsets.all(5),
                     // width: status == null ? 82 : (status ? 78 : 71),
                     decoration: BoxDecoration(
-                      color: status == null ? const Color(0xffFFCC01) : (status ? const Color(0xff27A22B) : const Color(0xffF50206)),
+                      color: status == null ? Color(BLUE) : (status ? const Color(0xff27A22B) : const Color(0xffF50206)),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(status == null ? "Processed" : (status ? "Approved" : "Rejected"), style: Global.getCustomFont(WHITE, 13, 'book')),

@@ -44,3 +44,23 @@ class LogoutState extends UserBlocState{
   @override
   List<Object?> get props => [];
 }
+
+class SuccessChangeNameState extends UserBlocState{
+  @override
+  List<Object?> get props => [];
+}
+
+class SuccessChangePasswordState extends UserBlocState{
+  @override
+  List<Object?> get props => [];
+}
+
+class PasswordNotMatchedState extends UserBlocState{
+  @override
+  List<Object?> get props => [];
+}
+
+class WrongPasswordState extends UserBlocState{
+  @override
+  List<Object?> get props => [];
+}

@@ -13,10 +13,8 @@ export 'user_bloc.dart';
 
 class UserBloc extends Bloc<UserEvent, UserBlocState> {
   final UserRepository _userRepository;
-  // final LogoutRepository _logoutRepository;
   final SharedPreferences _sharedPreferences;
 
-  // static create(UserRepository userRepository, LogoutRepository logoutRepository, SharedPreferences sharedPreferences) => UserBloc(userRepository, logoutRepository, sharedPreferences);
   static create(UserRepository userRepository, SharedPreferences sharedPreferences) => UserBloc(userRepository, sharedPreferences);
 
   UserBloc(this._userRepository, this._sharedPreferences) : super(LoadingUserState());
@@ -28,6 +26,12 @@ class UserBloc extends Bloc<UserEvent, UserBlocState> {
     }
     if(event is LogoutEvent) {
       yield* _logoutToState(event);
+    }
+    if(event is ChangeNameEvent) {
+      yield* _changeNameToState(event);
+    }
+    if(event is ChangePasswordEvent) {
+      yield* _changePasswordToState(event);
     }
   }
 
@@ -64,6 +68,52 @@ class UserBloc extends Bloc<UserEvent, UserBlocState> {
         yield NotLoggedInState();
       }
       yield ServerErrorState();
+    }
+  }
+
+  Stream<UserBlocState> _changeNameToState(ChangeNameEvent e) async* {
+    yield LoadingUserState();
+    final token = _sharedPreferences.getString("access_token");
+    try {
+      final response = await _userRepository.changeName(
+        "Bearer $token",
+        e.name
+      );
+      if(response.message == "name has been changed") {
+        yield SuccessChangeNameState();
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 500) {
+        yield FailedUserState();
+      } else if (e.response?.statusCode == 504) {
+        yield NotLoggedInState();
+      }
+    }
+  }
+
+  Stream<UserBlocState> _changePasswordToState(ChangePasswordEvent e) async* {
+    yield LoadingUserState();
+    final token = _sharedPreferences.getString("access_token");
+    try {
+      final response = await _userRepository.changePassword(
+        "Bearer $token",
+        e.password,
+        e.newPassword,
+        e.retype
+      );
+      if(response.message == "ok") {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString("access_token", response.token);
+        yield SuccessChangePasswordState();
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 403) {
+        yield WrongPasswordState();
+      } else if (e.response?.statusCode == 500) {
+        yield FailedUserState();
+      } else if (e.response?.statusCode == 420) {
+        yield PasswordNotMatchedState();
+      }
     }
   }
 }

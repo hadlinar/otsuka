@@ -95,6 +95,7 @@ class PDKBloc extends Bloc<PDKBlocEvent, PDKBlocState> {
     final token = _sharedPreferences.getString("access_token");
     try {
       final response = await _PDKRepository.approvePDK("Bearer $token", e.desc, e.date, e.id, e.cat, e.branch, e.disc, e.idDet);
+      print(response.message);
       if(response.message == "updated") {
         yield SuccessPostApproveState();
       }

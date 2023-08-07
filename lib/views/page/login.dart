@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ediscount/views/page/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,9 @@ class _LoginPage extends State<Login> {
   String pass = '';
   bool showPassword = true;
 
+  final home = Home();
+
+
   @override
   void dispose() {
     usernameController.dispose();
@@ -34,8 +39,8 @@ class _LoginPage extends State<Login> {
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginBlocState>(
       listener: (context, state) {
+        print("login $state");
         if (state is LoadingLoginState) {
-          print(state.toString());
           showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -55,12 +60,10 @@ class _LoginPage extends State<Login> {
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Container(
-                        child: Center(
-                            child: Text("Please wait",
-                                style: Global.getCustomFont(Global.BLACK, 14, 'medium'),
-                                textAlign: TextAlign.center)
-                        ),
+                      Center(
+                          child: Text("Please wait",
+                              style: Global.getCustomFont(Global.BLACK, 14, 'medium'),
+                              textAlign: TextAlign.center)
                       ),
                     ],
                   ),
@@ -70,7 +73,7 @@ class _LoginPage extends State<Login> {
         }
         else if (state is SuccessLoginState) {
           Navigator.push(context, MaterialPageRoute(
-              builder: (context) => Home()
+              builder: (context) => home
           ));
         }
         else if (state is WrongPasswordLoginState) {
@@ -78,6 +81,8 @@ class _LoginPage extends State<Login> {
               context: context,
               builder: (BuildContext context) {
                 return Global.defaultModal(() {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
                   Navigator.pop(context);
                   Navigator.pop(context);
                 }, context, Global.IC_WARNING, "Wrong password", "Ok", false);

@@ -13,7 +13,7 @@ class _UserService implements UserService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://172.20.30.67:3000/otsuka/ediscount';
+    baseUrl ??= 'http://103.140.207.25:3000/otsuka/ediscount';
   }
 
   final Dio _dio;
@@ -41,6 +41,62 @@ class _UserService implements UserService {
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = UserResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ChangeNameResponse> changeName(
+    String authorization,
+    Map<String, dynamic> body,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': authorization};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ChangeNameResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/change-name',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ChangeNameResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ChangePasswordResponse> changePassword(
+    String authorization,
+    Map<String, dynamic> body,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': authorization};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ChangePasswordResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/change-password',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ChangePasswordResponse.fromJson(_result.data!);
     return value;
   }
 

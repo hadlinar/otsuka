@@ -15,6 +15,12 @@ abstract class UserService{
   @GET('/user')
   Future<UserResponse> getUser(@Header("Authorization") String authorization);
 
+  @POST('/change-name')
+  Future<ChangeNameResponse> changeName(@Header("Authorization") String authorization, @Body() Map<String, dynamic> body);
+
+  @POST('/change-password')
+  Future<ChangePasswordResponse> changePassword(@Header("Authorization") String authorization, @Body() Map<String, dynamic> body);
+
   @POST('/logout')
   Future<LogoutResponse> logout(@Header("Authorization") String authorization);
 }
