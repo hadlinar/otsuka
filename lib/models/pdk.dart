@@ -66,6 +66,8 @@ class PDK {
   bool? final_status;
   String no_draft;
   String? rm_otsuka;
+  int level;
+  String segmen;
   String branch;
   String maker_name;
   String approver_1;
@@ -107,6 +109,8 @@ class PDK {
     this.final_status,
     required this.no_draft,
     this.rm_otsuka,
+    required this.level,
+    required this.segmen,
     required this.branch,
     required this.maker_name,
     required this.approver_1,
