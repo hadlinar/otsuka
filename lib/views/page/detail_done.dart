@@ -26,11 +26,6 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
   late List<DetailPDK> detailPDK = [];
   late List<double> disc = [0];
 
-  ScrollController scrollController = ScrollController(
-    initialScrollOffset: 11,
-    keepScrollOffset: true,
-  );
-
   final currencyFormatter = NumberFormat('#,##0', 'ID');
 
   @override
@@ -348,6 +343,44 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     )
                                                   ]
                                               ),
+                                              //category
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          "Category",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          widget.pdk.kategori_otsuka == "U" ? "Unite" : "Synergize",
+                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                      ),
+                                                    )
+                                                  ]
+                                              ),
+                                              //segement
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          "Segment",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          widget.pdk.segmen == "Tender" ? "BPJS" : "Reguler",
+                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                      ),
+                                                    )
+                                                  ]
+                                              ),
                                               TableRow(
                                                   children: [
                                                     Container(
@@ -376,13 +409,14 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                           ),
 
                           ListView.builder(
-                            initialScrollIndex: scrollController,
                             itemCount: widget.pdk.level,
                             scrollDirection: Axis.vertical,
+                            physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, i) {
 
                               Map<int, String> approver = {
+                                0: widget.pdk.approver_1,
                                 1: widget.pdk.approver_1,
                                 2: widget.pdk.approver_2,
                                 3: widget.pdk.approver_3,
@@ -392,6 +426,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                               };
 
                               Map<int, DateTime?> dateAppr = {
+                                0: widget.pdk.date_approve_1,
                                 1: widget.pdk.date_approve_1,
                                 2: widget.pdk.date_approve_2,
                                 3: widget.pdk.date_approve_3,
@@ -401,6 +436,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                               };
 
                               Map<int, String?> userDesc = {
+                                0: widget.pdk.user_desc_1,
                                 1: widget.pdk.user_desc_1,
                                 2: widget.pdk.user_desc_2,
                                 3: widget.pdk.user_desc_3,
@@ -409,13 +445,12 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                 6: widget.pdk.user_desc_6
                               };
 
-                              print('index $i');
-
-                              if (i == 0) {
+                              if (i+1 == 0) {
                                 return Container();
                               }
-                              else if(i == widget.user.role_id) {
-                                if(userDesc[i] == null ) {
+                              else if(i+1 == widget.user.role_id) {
+                                //APPROVED
+                                if(userDesc[i+1] == null ) {
                                   return SizedBox(
                                       width: MediaQuery.of(context).size.width / 1.1,
                                       child: Card(
@@ -442,7 +477,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                             Container(
                                                               padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                               child: Text(
-                                                                  approver[i].toString(),
+                                                                  approver[i+1].toString(),
                                                                   style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                               ),
                                                             ),
@@ -468,7 +503,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                               child: Align(
                                                                 alignment: Alignment.centerRight,
                                                                 child: Text(
-                                                                    dateAppr[i] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i]!).toString(),
+                                                                    dateAppr[i+1] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(),
                                                                     // style: Global.getCustomFont(Global.GREY, 13, 'book')
                                                                     style: const TextStyle(
                                                                         fontSize: 12,
@@ -491,7 +526,9 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                       )
                                   );
                                 }
-                                else if (userDesc[i] != null) {
+
+                                //REJECT
+                                else if (userDesc[i+1] != null) {
                                   return SizedBox(
                                       width: MediaQuery.of(context).size.width / 1.1,
                                       child: Card(
@@ -518,7 +555,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                             Container(
                                                               padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                               child: Text(
-                                                                  approver[i].toString(),
+                                                                  approver[i+1].toString(),
                                                                   style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                               ),
                                                             ),
@@ -536,30 +573,42 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                             ),
                                                           ]
                                                       ),
-                                                      TableRow(
-                                                          children: [
-                                                            Container(),
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 4),
-                                                              child: Align(
-                                                                alignment: Alignment.centerRight,
-                                                                child: Text(
-                                                                    dateAppr[i] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i]!).toString(),
-                                                                    // style: Global.getCustomFont(Global.GREY, 13, 'book')
-                                                                    style: const TextStyle(
-                                                                        fontSize: 12,
-                                                                        fontFamily: 'book',
-                                                                        fontStyle: FontStyle.italic,
-                                                                        color: Color(0xff6E6E6E)
-                                                                    )
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ]
-                                                      ),
                                                     ],
                                                   ),
                                                 ),
+                                              ),
+                                              Container(
+                                                  margin: const EdgeInsets.all(7),
+                                                  padding: const EdgeInsets.all(7),
+                                                  width: MediaQuery.of(context).size.width / 1.1,
+                                                  decoration: BoxDecoration(
+                                                    color: const Color(0xffE7ECF2),
+                                                    borderRadius: BorderRadius.circular(5),
+                                                  ),
+                                                  child: Column(
+                                                      children: [
+                                                        Align(
+                                                          alignment: Alignment.centerLeft,
+                                                          child: Text(
+                                                              userDesc[i+1]!,
+                                                              style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                          ),
+                                                        ),
+                                                        Align(
+                                                          alignment: Alignment.centerRight,
+                                                          child: Text(
+                                                              DateFormat('HH:mm, d MMM yyyy').format(widget.pdk.date_approve_1!),
+                                                              // style: Global.getCustomFont(Global.GREY, 13, 'book')
+                                                              style: const TextStyle(
+                                                                  fontSize: 12,
+                                                                  fontFamily: 'book',
+                                                                  fontStyle: FontStyle.italic,
+                                                                  color: Color(0xff6E6E6E)
+                                                              )
+                                                          ),
+                                                        ),
+                                                      ]
+                                                  )
                                               ),
                                             ],
                                           ),
@@ -568,63 +617,233 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                   );
                                 }
                               }
-                              else if (i > widget.user.role_id) {
-                                if(i <= widget.pdk.level) {
-                                  return SizedBox(
-                                      width: MediaQuery.of(context).size.width / 1.1,
-                                      child: Card(
-                                        color: Colors.white,
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10)
-                                        ),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(7),
-                                          child: Column(
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Container(
-                                                  child: Table(
-                                                    columnWidths: const <int, TableColumnWidth> {
-                                                      0: FixedColumnWidth(180),
-                                                      1: FixedColumnWidth(118),
-                                                    },
-                                                    children: [
-                                                      TableRow(
-                                                          children: [
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                              child: Text(
-                                                                  approver[i].toString(),
-                                                                  style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                              child: Text(
-                                                                "Waiting",
-                                                                style: TextStyle(
-                                                                  color: Color(Global.YELLOW),
-                                                                  fontFamily: 'book',
-                                                                  fontSize: 13,
+                              else if (i+1 > widget.user.role_id) {
+                                if(i+1 <= widget.pdk.level) {
+                                  if(userDesc[i+1] == null && dateAppr[i+1] != null) {
+                                    //approved
+                                    return SizedBox(
+                                        width: MediaQuery.of(context).size.width / 1.1,
+                                        child: Card(
+                                          color: Colors.white,
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(7),
+                                            child: Column(
+                                              children: [
+                                                Align(
+                                                  alignment: Alignment.centerLeft,
+                                                  child: Container(
+                                                    child: Table(
+                                                      columnWidths: const <int, TableColumnWidth> {
+                                                        0: FixedColumnWidth(180),
+                                                        1: FixedColumnWidth(118),
+                                                      },
+                                                      children: [
+                                                        TableRow(
+                                                            children: [
+                                                              Container(
+                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                                child: Text(
+                                                                    approver[i+1].toString(),
+                                                                    style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                                 ),
-                                                                textAlign: TextAlign.end,
                                                               ),
-                                                            ),
-                                                          ]
-                                                      ),
-                                                    ],
+                                                              Container(
+                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                                child: Text(
+                                                                  "Approved",
+                                                                  style: TextStyle(
+                                                                    color: Color(Global.GREEN),
+                                                                    fontFamily: 'book',
+                                                                    fontSize: 13,
+                                                                  ),
+                                                                  textAlign: TextAlign.end,
+                                                                ),
+                                                              ),
+                                                            ]
+                                                        ),
+                                                        TableRow(
+                                                            children: [
+                                                              Container(),
+                                                              Container(
+                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 4),
+                                                                child: Align(
+                                                                  alignment: Alignment.centerRight,
+                                                                  child: Text(
+                                                                      dateAppr[i+1] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(),
+                                                                      // style: Global.getCustomFont(Global.GREY, 13, 'book')
+                                                                      style: const TextStyle(
+                                                                          fontSize: 12,
+                                                                          fontFamily: 'book',
+                                                                          fontStyle: FontStyle.italic,
+                                                                          color: Color(0xff6E6E6E)
+                                                                      )
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ]
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                  );
+                                        )
+                                    );
+                                  }
+                                  else if(userDesc[i+1] != null) {
+                                    // reject
+                                    return SizedBox(
+                                        width: MediaQuery.of(context).size.width / 1.1,
+                                        child: Card(
+                                          color: Colors.white,
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(7),
+                                            child: Column(
+                                              children: [
+                                                Align(
+                                                  alignment: Alignment.centerLeft,
+                                                  child: Container(
+                                                    child: Table(
+                                                      columnWidths: const <int, TableColumnWidth> {
+                                                        0: FixedColumnWidth(180),
+                                                        1: FixedColumnWidth(118),
+                                                      },
+                                                      children: [
+                                                        TableRow(
+                                                            children: [
+                                                              Container(
+                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                                child: Text(
+                                                                    approver[i+1].toString(),
+                                                                    style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                                ),
+                                                              ),
+                                                              Container(
+                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                                child: Text(
+                                                                  "Rejected",
+                                                                  style: TextStyle(
+                                                                    color: Color(Global.RED),
+                                                                    fontFamily: 'book',
+                                                                    fontSize: 13,
+                                                                  ),
+                                                                  textAlign: TextAlign.end,
+                                                                ),
+                                                              ),
+                                                            ]
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                    margin: const EdgeInsets.all(7),
+                                                    padding: const EdgeInsets.all(7),
+                                                    width: MediaQuery.of(context).size.width / 1.1,
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(0xffE7ECF2),
+                                                      borderRadius: BorderRadius.circular(5),
+                                                    ),
+                                                    child: Column(
+                                                        children: [
+                                                          Align(
+                                                            alignment: Alignment.centerLeft,
+                                                            child: Text(
+                                                                userDesc[i+1]!,
+                                                                style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                            ),
+                                                          ),
+                                                          Align(
+                                                            alignment: Alignment.centerRight,
+                                                            child: Text(
+                                                                DateFormat('HH:mm, d MMM yyyy').format(widget.pdk.date_approve_1!),
+                                                                // style: Global.getCustomFont(Global.GREY, 13, 'book')
+                                                                style: const TextStyle(
+                                                                    fontSize: 12,
+                                                                    fontFamily: 'book',
+                                                                    fontStyle: FontStyle.italic,
+                                                                    color: Color(0xff6E6E6E)
+                                                                )
+                                                            ),
+                                                          ),
+                                                        ]
+                                                    )
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                    );
+                                  }
+                                  else if(widget.pdk.final_status != null && dateAppr[i+1] == null) {
+                                    return Container();
+                                  } else {
+                                    return SizedBox(
+                                        width: MediaQuery.of(context).size.width / 1.1,
+                                        child: Card(
+                                          color: Colors.white,
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(7),
+                                            child: Column(
+                                              children: [
+                                                Align(
+                                                  alignment: Alignment.centerLeft,
+                                                  child: Container(
+                                                    child: Table(
+                                                      columnWidths: const <int, TableColumnWidth> {
+                                                        0: FixedColumnWidth(180),
+                                                        1: FixedColumnWidth(118),
+                                                      },
+                                                      children: [
+                                                        TableRow(
+                                                            children: [
+                                                              Container(
+                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                                child: Text(
+                                                                    approver[i+1].toString(),
+                                                                    style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                                ),
+                                                              ),
+                                                              Container(
+                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                                child: Text(
+                                                                  "Waiting",
+                                                                  style: TextStyle(
+                                                                    color: Color(Global.YELLOW),
+                                                                    fontFamily: 'book',
+                                                                    fontSize: 13,
+                                                                  ),
+                                                                  textAlign: TextAlign.end,
+                                                                ),
+                                                              ),
+                                                            ]
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                    );
+                                  }
                                 }
-                                else if (userDesc[i] != null) {
+                                else if (userDesc[i+1] != null) {
                                   return SizedBox(
                                       width: MediaQuery.of(context).size.width / 1.1,
                                       child: Card(
@@ -651,7 +870,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                             Container(
                                                               padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                               child: Text(
-                                                                  approver[i].toString(),
+                                                                  approver[i+1].toString(),
                                                                   style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                               ),
                                                             ),
@@ -677,7 +896,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                               child: Align(
                                                                 alignment: Alignment.centerRight,
                                                                 child: Text(
-                                                                    dateAppr[i] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i]!).toString(),
+                                                                    dateAppr[i+1] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(),
                                                                     // style: Global.getCustomFont(Global.GREY, 13, 'book')
                                                                     style: const TextStyle(
                                                                         fontSize: 12,
@@ -727,7 +946,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                             Container(
                                                               padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                               child: Text(
-                                                                  approver[i].toString(),
+                                                                  approver[i+1].toString(),
                                                                   style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                               ),
                                                             ),
@@ -753,7 +972,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                               child: Align(
                                                                 alignment: Alignment.centerRight,
                                                                 child: Text(
-                                                                    dateAppr[i] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i]!).toString(),
+                                                                    dateAppr[i+1] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(),
                                                                     // style: Global.getCustomFont(Global.GREY, 13, 'book')
                                                                     style: const TextStyle(
                                                                         fontSize: 12,
@@ -777,7 +996,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                   );
                                 }
                               }
-                              else if (i < widget.user.role_id) {
+                              else if (i+1 < widget.user.role_id) {
                                 return SizedBox(
                                     width: MediaQuery.of(context).size.width / 1.1,
                                     child: Card(
@@ -804,7 +1023,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                           Container(
                                                             padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                             child: Text(
-                                                                approver[i].toString(),
+                                                                approver[i+1].toString(),
                                                                 style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                             ),
                                                           ),
@@ -830,7 +1049,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                             child: Align(
                                                               alignment: Alignment.centerRight,
                                                               child: Text(
-                                                                  dateAppr[i] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i]!).toString(),
+                                                                  dateAppr[i+1] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(),
                                                                   // style: Global.getCustomFont(Global.GREY, 13, 'book')
                                                                   style: const TextStyle(
                                                                       fontSize: 12,
@@ -857,7 +1076,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                           ),
 
                           ListView.builder(
-                              itemCount: detailPDK?.length,
+                              itemCount: detailPDK.length,
                               scrollDirection: Axis.vertical,
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,

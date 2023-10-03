@@ -28,10 +28,11 @@ typedef SuccessPostPDK = void Function(int resultMessage, BuildContext context);
 
 class _DetailPendingPDKPage extends State<DetailPendingPDK> {
   late List<DetailPDK> detailPDK = [];
-  TextEditingController notesController = TextEditingController();
+  late TextEditingController notesController;
   late List<TextEditingController> listDiscController = [];
   late List<double> disc = [];
   late List<double> totalDisc = [0];
+  GlobalKey<FormState> _formKey = GlobalKey();
   String notes = '';
   bool _val = false;
   bool _discChanged = false;
@@ -42,6 +43,14 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
   void initState() {
     super.initState();
     BlocProvider.of<PDKBloc>(context).add(GetDetailPDKEvent(widget.pdk.id.toString()));
+    notesController = TextEditingController();
+    notesController.addListener(() {
+      final _val = notesController.text.isNotEmpty;
+
+      setState(() {
+        this._val = _val;
+      });
+    });
   }
 
   @override
@@ -190,6 +199,9 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                   context: context,
                   builder: (BuildContext context) {
                     return Global.defaultModal(() {
+                      notes = '';
+                      notesController.text = "";
+                      _val = false;
                       widget.successPostPDK!(200, context);
                     }, context, Global.IC_CHECK, "Rejected", "Ok", false);
                   }
@@ -313,6 +325,44 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                               )
                                             ]
                                         ),
+                                        //category
+                                        TableRow(
+                                            children: [
+                                              Container(
+                                                padding: const EdgeInsets.all(4),
+                                                child: Text(
+                                                    "Category",
+                                                    style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.all(4),
+                                                child: Text(
+                                                    widget.pdk.kategori_otsuka == "U" ? "Unite" : "Synergize",
+                                                    style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                ),
+                                              )
+                                            ]
+                                        ),
+                                        //segement
+                                        TableRow(
+                                            children: [
+                                              Container(
+                                                padding: const EdgeInsets.all(4),
+                                                child: Text(
+                                                    "Segment",
+                                                    style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.all(4),
+                                                child: Text(
+                                                    widget.pdk.segmen == "Tender" ? "BPJS" : "Reguler",
+                                                    style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                ),
+                                              )
+                                            ]
+                                        ),
                                         TableRow(
                                             children: [
                                               Container(
@@ -343,6 +393,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                     ListView.builder(
                       itemCount: widget.pdk.level,
                       scrollDirection: Axis.vertical,
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, i) {
                         Map<int, String> approver = {
@@ -363,10 +414,10 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                           6: widget.pdk.date_approve_6
                         };
 
-                        if(i == widget.user?.role_id || i == 0) {
+                        if(i+1 == widget.user?.role_id || i+1 == 0) {
                           return Container();
                         }
-                        else if(i < widget.user!.role_id) {
+                        else if(i+1 < widget.user!.role_id) {
                           return SizedBox(
                             width: MediaQuery.of(context).size.width / 1.1,
                             child: Card(
@@ -393,7 +444,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                     Container(
                                                       padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                       child: Text(
-                                                          approver[i].toString(),
+                                                          approver[i+1].toString(),
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                       ),
                                                     ),
@@ -419,7 +470,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                       child: Align(
                                                         alignment: Alignment.centerRight,
                                                         child: Text(
-                                                            dateAppr[i] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i]!).toString(),
+                                                            dateAppr[i+1] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(),
                                                             // style: Global.getCustomFont(Global.GREY, 13, 'book')
                                                             style: const TextStyle(
                                                                 fontSize: 12,
@@ -442,7 +493,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                               )
                           );
                         }
-                        else if(i > widget.user!.role_id && i <= widget.pdk.level) {
+                        else if(i+1 > widget.user!.role_id && i+1 <= widget.pdk.level) {
                           return SizedBox(
                               width: MediaQuery.of(context).size.width / 1.1,
                               child: Card(
@@ -469,7 +520,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                     Container(
                                                       padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                       child: Text(
-                                                          approver[i].toString(),
+                                                          approver[i+1].toString(),
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                       ),
                                                     ),
@@ -680,7 +731,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                               "${double.parse(listDiscController[i].text)} %",
                                                               style: Global.getCustomFont(Global.BLACK, 13, 'book')
                                                           ),
-                                                          widget.user?.role_id == 3 ? InkWell(
+                                                          widget.user?.role_id == 3  && widget.pdk.level > 3 ? InkWell(
                                                             onTap: (){
                                                               showDialog(
                                                                 context: context,
@@ -884,29 +935,6 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                             elevation: 0,
                             child: Column(
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.all(7),
-                                  child: TextFormField(
-                                    style: Global.getCustomFont(Global.BLACK, 13, 'medium'),
-                                    maxLines: 5,
-                                    maxLength: 200,
-                                    controller: notesController,
-                                    onChanged: (text) {
-                                      notes = text;
-                                      setState(() {
-                                        notes == "" ? _val = true : _val = false;
-                                      });
-                                    },
-                                    decoration: InputDecoration(
-                                      labelText: "Notes",
-                                      errorText: _val ? 'Notes can\'t be empty' : null,
-                                      alignLabelWithHint: true,
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius .circular(10),
-                                          borderSide: BorderSide()),
-                                    ),
-                                  ),
-                                ),
                                 Align(
                                   alignment: Alignment.center,
                                   child: Container(
@@ -933,28 +961,124 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                   backgroundColor: MaterialStateProperty.all<Color>(Color(Global.WHITE)),
                                                 ),
                                                 onPressed: () {
-                                                  setState(() {
-                                                    notes == "" ? _val = true : _val = false;
-                                                  });
-                                                  if(_val == false) {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext context) {
-                                                          return Global.defaultModal(() {
-                                                            Navigator.pop(context);
-                                                            BlocProvider.of<PDKBloc>(context).add(
-                                                                PostRejectPDKEvent(
-                                                                    notesController.text,
-                                                                    DateTime.now().toString(),
-                                                                    widget.pdk.id,
-                                                                    widget.pdk.kategori_otsuka!,
-                                                                    widget.pdk.branch_id
+
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+
+                                                      return AlertDialog(
+                                                        shape: const RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.all(Radius.circular(10)
+                                                            )
+                                                        ),
+                                                        content: StatefulBuilder(
+                                                          builder: (BuildContext context, StateSetter setState) {
+                                                            return SizedBox(
+                                                                width: 322,
+                                                                child: Column(
+                                                                    mainAxisSize: MainAxisSize.min,
+                                                                    children: [
+                                                                      TextFormField(
+                                                                        key: _formKey,
+                                                                        style: Global.getCustomFont(Global.BLACK, 13, 'medium'),
+                                                                        maxLines: 5,
+                                                                        maxLength: 200,
+                                                                        controller: notesController,
+                                                                        onChanged: (text) {
+                                                                          notes = text;
+                                                                          setState(() {
+                                                                            _val = notesController.text == "" ? false : true;
+                                                                          });
+                                                                        },
+                                                                        // validator: (value) => !_val ? "Notes can\'t be empty" : null,
+                                                                        decoration: InputDecoration(
+                                                                          labelText: "Notes",
+                                                                          errorText: !_val ? 'Notes can\'t be empty' : null,
+                                                                          alignLabelWithHint: true,
+                                                                          border: OutlineInputBorder(
+                                                                              borderRadius: BorderRadius .circular(10),
+                                                                              borderSide: BorderSide()),
+                                                                        ),
+                                                                      ),
+                                                                      Container(
+                                                                        padding: const EdgeInsets.only(top: 10),
+                                                                        child: Row(
+                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                                          children: [
+                                                                            ElevatedButton(
+                                                                                style: ButtonStyle(
+                                                                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                                                    RoundedRectangleBorder(
+                                                                                        borderRadius: BorderRadius.circular(18.0),
+                                                                                        side: BorderSide(
+                                                                                            color: Color(Global.RED),
+                                                                                            width: 3
+                                                                                        )
+                                                                                    ),
+                                                                                  ),
+                                                                                  backgroundColor: MaterialStateProperty.all<Color>(Color(Global.WHITE)),
+                                                                                ),
+                                                                                onPressed: (){
+                                                                                  notes = '';
+                                                                                  notesController.text = "";
+                                                                                  _val = false;
+                                                                                  Navigator.pop(context);
+                                                                                },
+                                                                                child: Text(
+                                                                                  "Cancel",
+                                                                                  style: TextStyle(
+                                                                                      color: Color(Global.RED),
+                                                                                      fontFamily: 'bold',
+                                                                                      fontSize: 13
+                                                                                  ),
+                                                                                )
+                                                                            ),
+                                                                            Container(
+                                                                              width: 14,
+                                                                            ),
+                                                                            ElevatedButton(
+                                                                                style: ElevatedButton.styleFrom(
+                                                                                  disabledForegroundColor: Color(Global.BLUE).withOpacity(0.38),
+                                                                                  disabledBackgroundColor: Color(Global.BLUE).withOpacity(0.12),
+                                                                                  shape: RoundedRectangleBorder(
+                                                                                    borderRadius: BorderRadius.circular(18.0),
+                                                                                    // side: BorderSide(color: notesController.text.isEmpty ? Color(Global.BLUE).withOpacity(0.12) : Color(Global.BLUE))
+                                                                                  ),
+                                                                                ),
+                                                                                onPressed: _val ? (){
+                                                                                  Navigator.pop(context);
+                                                                                  BlocProvider.of<PDKBloc>(context).add(
+                                                                                      PostRejectPDKEvent(
+                                                                                          notesController.text,
+                                                                                          DateTime.now().toString(),
+                                                                                          widget.pdk.id,
+                                                                                          widget.pdk.kategori_otsuka!,
+                                                                                          widget.pdk.branch_id
+                                                                                      )
+                                                                                  );
+                                                                                } : null,
+                                                                                child: const Text(
+                                                                                  "Submit",
+                                                                                  style: TextStyle(
+                                                                                      color: Colors.white,
+                                                                                      fontFamily: 'bold',
+                                                                                      fontSize: 13
+                                                                                  ),
+                                                                                )
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      )
+
+                                                                    ]
                                                                 )
                                                             );
-                                                          }, context, Global.IC_WARNING, "Are you sure you want to reject this PDK?", "Yes", true);
-                                                        }
-                                                    );
-                                                  }
+                                                          }
+                                                        )
+                                                      );
+                                                    }
+                                                  );
                                                 },
                                                 child: Text(
                                                   "Reject",
@@ -966,6 +1090,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                 )
                                             ),
                                           ),
+
                                           Container(
                                             width: 14,
                                           ),
@@ -982,61 +1107,49 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                   backgroundColor: MaterialStateProperty.all<Color>(Color(Global.BLUE)),
                                                 ),
                                                 onPressed: () {
-                                                  setState(() {
-                                                    notes == "" ? _val = true : _val = false;
-                                                  });
-                                                  if(_val == false) {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext context) {
-                                                          return Global.defaultModal(() {
-                                                            Navigator.pop(context);
-                                                            (_discChanged) ? (
-                                                              widget.user?.role_id == 3 ? ({
-                                                                for(int i=0; i < disc.length; i++) {
-                                                                  BlocProvider.of<PDKBloc>(context).add(
-                                                                      PostApprovePDKEvent(
-                                                                        notesController.text,
-                                                                        DateTime.now().toString(),
-                                                                        widget.pdk.id,
-                                                                        widget.pdk.kategori_otsuka!,
-                                                                        widget.pdk.branch_id,
-                                                                        disc[i].toString(),
-                                                                        detailPDK[i].id
-                                                                      )
-                                                                  )
-                                                                },
-                                                                _discChanged = false
-                                                              }) : ({
-                                                                BlocProvider.of<PDKBloc>(context).add(
-                                                                    PostApprovePDKEvent(
-                                                                        notesController.text,
-                                                                        DateTime.now().toString(),
-                                                                        widget.pdk.id,
-                                                                        widget.pdk.kategori_otsuka!,
-                                                                        widget.pdk.branch_id,
-                                                                        '0.0',
-                                                                        0
-                                                                    )
-                                                                ),
-                                                              })
-                                                            ) : (
-                                                                BlocProvider.of<PDKBloc>(context).add(
-                                                                    PostApprovePDKEvent(
-                                                                        notesController.text,
-                                                                        DateTime.now().toString(),
-                                                                        widget.pdk.id,
-                                                                        widget.pdk.kategori_otsuka!,
-                                                                        widget.pdk.branch_id,
-                                                                        '0.0',
-                                                                        0
-                                                                    )
-                                                                )
-                                                            );
-                                                          }, context, Global.IC_WARNING, "Are you sure you want to approve this PDK?", "Yes", true);
-                                                        }
-                                                    );
-                                                  }
+                                                  Navigator.pop(context);
+                                                  (_discChanged) ? (
+                                                      widget.user?.role_id == 3 ? ({
+                                                        for(int i=0; i < disc.length; i++) {
+                                                          BlocProvider.of<PDKBloc>(context).add(
+                                                              PostApprovePDKEvent(
+                                                                  null,
+                                                                  DateTime.now().toString(),
+                                                                  widget.pdk.id,
+                                                                  widget.pdk.kategori_otsuka!,
+                                                                  widget.pdk.branch_id,
+                                                                  disc[i].toString(),
+                                                                  detailPDK[i].id
+                                                              )
+                                                          )
+                                                        },
+                                                        _discChanged = false
+                                                      }) : ({
+                                                        BlocProvider.of<PDKBloc>(context).add(
+                                                            PostApprovePDKEvent(
+                                                                null,
+                                                                DateTime.now().toString(),
+                                                                widget.pdk.id,
+                                                                widget.pdk.kategori_otsuka!,
+                                                                widget.pdk.branch_id,
+                                                                '0.0',
+                                                                0
+                                                            )
+                                                        ),
+                                                      })
+                                                  ) : (
+                                                      BlocProvider.of<PDKBloc>(context).add(
+                                                          PostApprovePDKEvent(
+                                                              null,
+                                                              DateTime.now().toString(),
+                                                              widget.pdk.id,
+                                                              widget.pdk.kategori_otsuka!,
+                                                              widget.pdk.branch_id,
+                                                              '0.0',
+                                                              0
+                                                          )
+                                                      )
+                                                  );
                                                 },
                                                 child: const Text(
                                                   "Approve",

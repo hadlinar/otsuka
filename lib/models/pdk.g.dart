@@ -10,7 +10,7 @@ PDK _$PDKFromJson(Map<String, dynamic> json) => PDK(
       id: json['id'] as int,
       no_register: json['no_register'] as String?,
       branch_id: json['branch_id'] as String,
-      kategori_otsuka: json['kategori_otsuka'] as String?,
+      kategori_otsuka: json['kategori_otsuka'] as String,
       kode_pelanggan: json['kode_pelanggan'] as String,
       supplier_id: json['supplier_id'] as String,
       maker: json['maker'] as String,

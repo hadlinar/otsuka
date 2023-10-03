@@ -39,7 +39,7 @@ class PDK {
   int id;
   String? no_register;
   String branch_id;
-  String? kategori_otsuka;
+  String kategori_otsuka;
   String kode_pelanggan;
   String supplier_id;
   String maker;
@@ -82,7 +82,7 @@ class PDK {
     required this.id,
     required this.no_register,
     required this.branch_id,
-    this.kategori_otsuka,
+    required this.kategori_otsuka,
     required this.kode_pelanggan,
     required this.supplier_id,
     required this.maker,
