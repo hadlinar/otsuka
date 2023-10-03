@@ -15,7 +15,7 @@ class GetDetailPDKEvent extends PDKBlocEvent{
 }
 
 class PostApprovePDKEvent extends PDKBlocEvent{
-  String desc;
+  void desc;
   String date;
   int id;
   String cat;

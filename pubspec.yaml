@@ -41,6 +41,7 @@ flutter:
   assets:
      # images
      - assets/images/Login_background.svg
+     - assets/images/logo.png
 
     # icons
      - assets/icons/ic_cancel.png
