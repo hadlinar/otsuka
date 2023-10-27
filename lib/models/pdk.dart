@@ -152,13 +152,13 @@ class DetailPDK {
   int id;
   int id_ref;
   String kode_barang;
-  double qty;
-  double hna;
-  double total_sales;
-  double percent_disc_rn;
-  double percent_disc_outlet;
-  double percent_disc_konversi;
-  double total_disc;
+  int qty;
+  num hna;
+  num total_sales;
+  num percent_disc_rn;
+  num percent_disc_outlet;
+  num percent_disc_konversi;
+  num total_disc;
   String prod_name;
 
   DetailPDK({

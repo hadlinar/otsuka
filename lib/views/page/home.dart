@@ -371,16 +371,16 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                 ),
                               ],
                             ),
-                                onRefresh: () {
-                                  return Future.delayed(
-                                    const Duration(seconds: 2),
-                                    () {
-                                      setState(() {
-                                        BlocProvider.of<UserBloc>(context).add(GetUserEvent());
-                                      });
-                                    }
-                                  );
-                                }
+                              onRefresh: () {
+                                return Future.delayed(
+                                  const Duration(seconds: 2),
+                                  () {
+                                    setState(() {
+                                      BlocProvider.of<UserBloc>(context).add(GetUserEvent());
+                                    });
+                                  }
+                                );
+                              }
                             ),
                             RefreshIndicator(
                               color: Color(Global.TOSCA),

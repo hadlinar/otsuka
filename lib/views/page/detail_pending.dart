@@ -30,8 +30,8 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
   late List<DetailPDK> detailPDK = [];
   late TextEditingController notesController;
   late List<TextEditingController> listDiscController = [];
-  late List<double> disc = [];
-  late List<double> totalDisc = [0];
+  late List<num> disc = [];
+  late List<num> totalDisc = [0];
   GlobalKey<FormState> _formKey = GlobalKey();
   String notes = '';
   bool _val = false;
@@ -86,7 +86,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
             ),
           ),
           title: Text(
-              "PDK Detail",
+              "Detail PDK",
               style: Global.getCustomFont(Global.WHITE, 15, 'medium')
           ),
           actions: [
@@ -258,7 +258,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                               Container(
                                                 padding: const EdgeInsets.all(4),
                                                 child: Text(
-                                                    "Proposed by",
+                                                    "Diajukan Oleh",
                                                     style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                 ),
                                               ),
@@ -276,7 +276,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                               Container(
                                                 padding: const EdgeInsets.all(4),
                                                 child: Text(
-                                                    "Date created",
+                                                    "Tanggal diajukan",
                                                     style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                 ),
                                               ),
@@ -294,7 +294,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                               Container(
                                                 padding: const EdgeInsets.all(4),
                                                 child: Text(
-                                                    "Customer Code",
+                                                    "Kode Pelanggan",
                                                     style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                 ),
                                               ),
@@ -312,7 +312,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                               Container(
                                                 padding: const EdgeInsets.all(4),
                                                 child: Text(
-                                                    "Customer Name",
+                                                    "Nama Pelanggan",
                                                     style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                 ),
                                               ),
@@ -331,7 +331,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                               Container(
                                                 padding: const EdgeInsets.all(4),
                                                 child: Text(
-                                                    "Category",
+                                                    "Team Product Group",
                                                     style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                 ),
                                               ),
@@ -350,7 +350,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                               Container(
                                                 padding: const EdgeInsets.all(4),
                                                 child: Text(
-                                                    "Segment",
+                                                    "Produk Segment",
                                                     style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                 ),
                                               ),
@@ -368,7 +368,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                               Container(
                                                 padding: const EdgeInsets.all(4),
                                                 child: Text(
-                                                    "Description",
+                                                    "Deskripsi",
                                                     style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                 ),
                                               ),
@@ -405,6 +405,15 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                           6: widget.pdk.approver_6
                         };
 
+                        Map<int, String> level = {
+                          1: "Branch Manager",
+                          2: "RM",
+                          3: "Rajawali Nusindo",
+                          4: "NSM",
+                          5: "Asst. Dir",
+                          6: "BUD"
+                        };
+
                         Map<int, DateTime?> dateAppr = {
                           1: widget.pdk.date_approve_1,
                           2: widget.pdk.date_approve_2,
@@ -416,8 +425,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
 
                         if(i+1 == widget.user?.role_id || i+1 == 0) {
                           return Container();
-                        }
-                        else if(i+1 < widget.user!.role_id) {
+                        }else if(i+1 < widget.user!.role_id) {
                           return SizedBox(
                             width: MediaQuery.of(context).size.width / 1.1,
                             child: Card(
@@ -451,6 +459,13 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                     Container(
                                                       padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                       child: Text(
+                                                          level[i+1].toString(),
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: Text(
                                                           "Approved",
                                                           style: TextStyle(
                                                             color: Color(Global.GREEN),
@@ -460,6 +475,18 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                         textAlign: TextAlign.end,
                                                       ),
                                                     ),
+                                                  ]
+                                              ),
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
+                                                      child: Text(
+                                                          level[i+1].toString(),
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
+                                                    Container(),
                                                   ]
                                               ),
                                               TableRow(
@@ -548,6 +575,8 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                               )
                           );
                         }
+
+                        print('${listDiscController[i].text} ${listDiscController[i].text.length}');
                       },
                     ),
 
@@ -580,7 +609,25 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "Item Product",
+                                                          "Kode Produk",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.only(left: 4, top: 4, right: 4, bottom: 8),
+                                                      child: Text(
+                                                          detailPDK[i].kode_barang,
+                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                      ),
+                                                    )
+                                                  ]
+                                              ),
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          "Produk Item",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                       ),
                                                     ),
@@ -631,7 +678,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "Qty",
+                                                          "QTY",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                       ),
                                                     ),
@@ -649,7 +696,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "HNA",
+                                                          "HNA (Rp)",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                       ),
                                                     ),
@@ -683,9 +730,9 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                               TableRow(
                                                   children: [
                                                     Container(
-                                                      padding: const EdgeInsets.only(top: 4, left: 4),
+                                                      padding: const EdgeInsets.only(top: 20, left: 4),
                                                       child: Text(
-                                                          "Discount",
+                                                          "Diskon",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                       ),
                                                     ),
@@ -728,7 +775,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                         children: [
                                                           Text(
-                                                              "${double.parse(listDiscController[i].text)} %",
+                                                              "${int.parse(listDiscController[i].text)}%",
                                                               style: Global.getCustomFont(Global.BLACK, 13, 'book')
                                                           ),
                                                           widget.user?.role_id == 3  && widget.pdk.level > 3 ? InkWell(
@@ -802,7 +849,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                                                           onPressed: () {
                                                                                             setState(() {
                                                                                               _discChanged = true;
-                                                                                              disc[i] = double.parse(listDiscController[i].text);
+                                                                                              disc[i] = int.parse(listDiscController[i].text);
                                                                                             });
                                                                                             Navigator.of(context).pop();
                                                                                           },
@@ -843,38 +890,56 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                     )
                                                   ]
                                               ),
-                                              // TableRow(
-                                              //     children: [
-                                              //       Container(
-                                              // padding: const EdgeInsets.only(top:4, right: 4, bottom: 4, left: 20),
-                                              //         padding: const EdgeInsets.all(4),
-                                              //         child: Text(
-                                              //             "Otsuka Indonesia",
-                                              //             style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
-                                              //         ),
-                                              //       ),
-                                              //       Container(
-                                              //         padding: const EdgeInsets.all(4),
-                                              //         child: Text(
-                                              //             "",
-                                              //             style: Global.getCustomFont(Global.BLACK, 13, 'book')
-                                              //         ),
-                                              //       )
-                                              //     ]
-                                              // ),
                                               TableRow(
                                                   children: [
                                                     Container(
+                                                      // padding: const EdgeInsets.only(top:4, right: 4, bottom: 4, left: 20),
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "Otsuka Discount Load",
+                                                          "Otsuka Indonesia",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                       ),
                                                     ),
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "${detailPDK[i].total_disc - double.parse(listDiscController[i].text) - detailPDK[i].percent_disc_konversi} %",
+                                                          "",
+                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                      ),
+                                                    )
+                                                  ]
+                                              ),
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top:4, right: 4, bottom: 4, left: 30),
+                                                      child: Text(
+                                                          "Diskon Outlet",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          "${(detailPDK[i].total_disc - int.parse(listDiscController[i].text) - detailPDK[i].percent_disc_konversi)}%",
+                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                      ),
+                                                    )
+                                                  ]
+                                              ),
+                                              TableRow(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top:4, right: 4, bottom: 4, left: 30),
+                                                      child: Text(
+                                                          "Diskon Bonus",
+                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: Text(
+                                                          "${detailPDK[i].percent_disc_konversi}%",
                                                           style: Global.getCustomFont(Global.BLACK, 13, 'book')
                                                       ),
                                                     )
@@ -885,32 +950,14 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "Goods Bonus Conversion",
-                                                          style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      padding: const EdgeInsets.all(4),
-                                                      child: Text(
-                                                          "${detailPDK[i].percent_disc_konversi} %",
-                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
-                                                      ),
-                                                    )
-                                                  ]
-                                              ),
-                                              TableRow(
-                                                  children: [
-                                                    Container(
-                                                      padding: const EdgeInsets.all(4),
-                                                      child: Text(
-                                                          "Total Discount",
+                                                          "Diskon Total",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                       ),
                                                     ),
                                                     Container(
                                                       padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                       child: Text(
-                                                          "${detailPDK[i].total_disc} %",
+                                                          "${detailPDK[i].total_disc}%",
                                                           style: Global.getCustomFont(Global.BLACK, 13, 'bold')
                                                       ),
                                                     )

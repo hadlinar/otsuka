@@ -24,7 +24,7 @@ class DetailDonePDK extends StatefulWidget {
 
 class _DetailDonePDKPage extends State<DetailDonePDK> {
   late List<DetailPDK> detailPDK = [];
-  late List<double> disc = [0];
+  late List<num> disc = [0];
 
   final currencyFormatter = NumberFormat('#,##0', 'ID');
 
@@ -1296,7 +1296,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                           Container(
                                                             padding: const EdgeInsets.only(top:4, right: 4, bottom: 4, left: 20),
                                                             child: Text(
-                                                                "Goods Bonus Conversion",
+                                                                "Bonus Discount",
                                                                 style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                             ),
                                                           ),

@@ -6,8 +6,8 @@ import 'package:intl/intl.dart';
 
 class Global {
   // static const String baseUrl = "http://10.0.2.2:3000/otsuka/ediscount";
-  static const String baseUrl = "http://103.140.207.25:3000/otsuka/ediscount";
-  // static const String baseUrl = "http://172.20.30.67:3000/otsuka/ediscount";
+  // static const String baseUrl = "http://103.140.207.25:3000/otsuka/ediscount";
+  static const String baseUrl = "http://172.20.60.14:3000/otsuka/ediscount";
 
   static String ACCESS_TOKEN = "access_token";
 
