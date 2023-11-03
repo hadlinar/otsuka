@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data_sources/repository/user_repository.dart';
+import '../../utils/global_state.dart';
 import 'user_state.dart';
 import 'user_event.dart';
 import 'user_bloc.dart';
@@ -41,7 +42,7 @@ class UserBloc extends Bloc<UserEvent, UserBlocState> {
     try{
       final response = await _userRepository.getUser("Bearer $token");
       if (response.message == "ok") {
-        yield GetUserState(response.result);
+        yield GetUserState(response.result, response.check);
       }
     } on DioException catch(e) {
       if(e.response?.statusCode == 500) {

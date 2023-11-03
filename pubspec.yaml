@@ -28,6 +28,8 @@ dependencies:
   url_launcher: ^6.0.20
   path_provider: ^2.0.9
   flutter_spinkit: ^5.2.0
+  stepper_list_view: ^0.0.1
+  awesome_snackbar_content: ^0.1.1
 
 dev_dependencies:
   flutter_test:
