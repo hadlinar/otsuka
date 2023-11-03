@@ -1,4 +1,4 @@
-package com.example.ediscount
+package com.nusindo.sindoro
 
 import io.flutter.embedding.android.FlutterActivity
 
