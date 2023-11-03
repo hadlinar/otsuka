@@ -36,8 +36,9 @@ class ServerErrorState extends UserBlocState{
 
 class GetUserState extends UserBlocState{
   User getUser;
+  String check;
 
-  GetUserState(this.getUser);
+  GetUserState(this.getUser, this.check);
 }
 
 class LogoutState extends UserBlocState{

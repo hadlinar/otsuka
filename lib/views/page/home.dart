@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:ediscount/bloc/user/user_bloc.dart';
 import 'package:ediscount/views/page/detail_pending.dart';
 import 'package:ediscount/views/page/login.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/global.dart';
 import '../../../utils/global_state.dart';
 import '../../bloc/pdk/pdk_bloc.dart';
@@ -35,6 +37,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
   late GlobalKey<ScaffoldState> _scaffoldKey;
 
   User? user;
+  late String check;
   bool fromProfile = false;
 
   late UserBloc userBloc;
@@ -42,6 +45,8 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
 
   late StreamSubscription streamUser;
   late StreamSubscription streamPdk;
+
+  late final SharedPreferences _sharedPreferences;
 
   @override
   void initState() {
@@ -83,7 +88,25 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
       if (state is GetUserState) {
         setState(() {
           user = state.getUser;
+          check = state.check;
         });
+
+        print(check);
+
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: 'Perhatian!',
+            message: 'Silahkan ganti password terlebih dahulu',
+            contentType: ContentType.failure,
+          ),
+          duration: const Duration(minutes: 1),
+        );
+
+        check == "1" ? ScaffoldMessenger.of(context).showSnackBar(snackBar) : Container();
+
         streamUser.cancel();
       } else {
         Container();
@@ -131,6 +154,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(
         onWillPop: () {
           showDialog(
@@ -171,7 +195,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                 decoration: BoxDecoration(
                     gradient: SweepGradient(
                       colors: [Color(Global.TOSCA), Color(Global.BLUE)],
-                      stops: [0, 1],
+                      stops: const [0, 1],
                       center: Alignment.bottomLeft,
                     )
                 ),
@@ -185,7 +209,23 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                         if(state is GetUserState) {
                           setState(() {
                             user = state.getUser;
+                            check = state.check;
                           });
+
+                          final snackBar = SnackBar(
+                            elevation: 0,
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: Colors.transparent,
+                            content: AwesomeSnackbarContent(
+                              title: 'Perhatian!',
+                              message: 'Silahkan ganti password terlebih dahulu',
+                              contentType: ContentType.failure,
+                            ),
+                            duration: const Duration(seconds: 30),
+                          );
+
+                          check == "1" ? ScaffoldMessenger.of(context).showSnackBar(snackBar) : Container();
+
                         } else {
                           Container();
                         }
@@ -323,6 +363,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                   child: pdk.isNotEmpty ? ListView.builder(
                                     itemCount: pdk.length,
                                     scrollDirection: Axis.vertical,
+                                    physics: const AlwaysScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemBuilder: (context, i) {
                                       final detailPage = DetailPendingPDK(
@@ -347,27 +388,34 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                         child: Global.getCardList(pdk[i].kode_pelanggan, pdk[i].branch, pdk[i].cust, pdk[i].date),
                                       );
                                     },
-                                  ) : Container(
-                                      child: Center(
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                  Global.IC_EMPTY,
-                                                  height: 68
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.only(top:10),
-                                                child: Text(
-                                                  "No pending PDK",
-                                                  style: Global.getCustomFont(0xffC1C2C3, 15, 'medium'),
-                                                ),
+                                  ) : ListView.builder(
+                                        itemCount: 1,
+                                        scrollDirection: Axis.vertical,
+                                        physics: const AlwaysScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, i) {
+                                          return Center(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Image.asset(
+                                                      Global.IC_EMPTY,
+                                                      height: 68
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets.only(top:10),
+                                                    child: Text(
+                                                      "No pending PDK",
+                                                      style: Global.getCustomFont(0xffC1C2C3, 15, 'medium'),
+                                                    ),
+                                                  )
+                                                ],
                                               )
-                                            ],
-                                          )
-                                      )
-                                  ),
+                                          );
+                                        },
+                                  )
+
                                 ),
                               ],
                             ),
@@ -376,7 +424,12 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                   const Duration(seconds: 2),
                                   () {
                                     setState(() {
-                                      BlocProvider.of<UserBloc>(context).add(GetUserEvent());
+                                      userBloc = BlocProvider.of<UserBloc>(context);
+                                      userBloc.add(GetUserEvent());
+
+                                      pdkBloc = BlocProvider.of<PDKBloc>(context);
+                                      pdkBloc.add(GetProcessPDKEvent());
+                                      pdkBloc.add(GetDonePDKEvent());
                                     });
                                   }
                                 );
@@ -406,8 +459,13 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                             );
                                           },
                                         ),
-                                      ) : Container(
-                                          child: Center(
+                                      ) : ListView.builder(
+                                        itemCount: 1,
+                                        scrollDirection: Axis.vertical,
+                                        physics: const AlwaysScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, i) {
+                                          return Center(
                                               child: Column(
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -419,13 +477,14 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                                   Container(
                                                     padding: const EdgeInsets.only(top:10),
                                                     child: Text(
-                                                      "No PDK Approved",
+                                                      "No Processed PDK",
                                                       style: Global.getCustomFont(0xffC1C2C3, 15, 'medium'),
                                                     ),
                                                   )
                                                 ],
                                               )
-                                          )
+                                          );
+                                        },
                                       )
                                   ),
                                 ],
@@ -435,7 +494,12 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                   const Duration(seconds: 2),
                                   () {
                                     setState(() {
-                                      BlocProvider.of<UserBloc>(context).add(GetUserEvent());
+                                      userBloc = BlocProvider.of<UserBloc>(context);
+                                      userBloc.add(GetUserEvent());
+
+                                      pdkBloc = BlocProvider.of<PDKBloc>(context);
+                                      pdkBloc.add(GetProcessPDKEvent());
+                                      pdkBloc.add(GetDonePDKEvent());
                                     });
                                   }
                                 );
@@ -443,8 +507,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                             )
                           ],
                         ),
-                      )
-                      // ),
+                      ),
                     ],
                   )
               ),

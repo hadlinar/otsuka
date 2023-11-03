@@ -35,9 +35,10 @@ class User {
 @JsonSerializable()
 class UserResponse {
   String message;
+  String check;
   User result;
 
-  UserResponse(this.message, this.result);
+  UserResponse(this.message, this.check, this.result);
 
   factory UserResponse.fromJson(Map<String, dynamic> json) => _$UserResponseFromJson(json);
 }

@@ -9,6 +9,7 @@ import '../../bloc/pdk/pdk_bloc.dart';
 import '../../models/pdk.dart';
 import '../../models/user.dart';
 import '../../utils/global.dart';
+import '../../widget/custom_stepper.dart';
 
 class DetailDonePDK extends StatefulWidget {
   PDK pdk;
@@ -24,9 +25,16 @@ class DetailDonePDK extends StatefulWidget {
 
 class _DetailDonePDKPage extends State<DetailDonePDK> {
   late List<DetailPDK> detailPDK = [];
-  late List<num> disc = [0];
+  late List<String> disc = [];
 
-  final currencyFormatter = NumberFormat('#,##0', 'ID');
+  static String convertToIdr(dynamic number, int decimalDigit) {
+    NumberFormat currencyFormatter = NumberFormat.currency(
+      locale: 'id',
+      symbol: 'Rp ',
+      decimalDigits: decimalDigit,
+    );
+    return currencyFormatter.format(number);
+  }
 
   @override
   void initState() {
@@ -276,7 +284,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "Proposed by",
+                                                          "Diajukan Oleh",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                       ),
                                                     ),
@@ -294,7 +302,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "Date created",
+                                                          "Tanggal diajukan",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                       ),
                                                     ),
@@ -312,7 +320,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "Customer Code",
+                                                          "Kode Pelanggan",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                       ),
                                                     ),
@@ -330,7 +338,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "Customer Name",
+                                                          "Nama Pelanggan",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                       ),
                                                     ),
@@ -343,13 +351,12 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     )
                                                   ]
                                               ),
-                                              //category
                                               TableRow(
                                                   children: [
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "Category",
+                                                          "Team Product Group",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                       ),
                                                     ),
@@ -362,13 +369,13 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     )
                                                   ]
                                               ),
-                                              //segement
+                                              //segment
                                               TableRow(
                                                   children: [
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "Segment",
+                                                          "Produk Segment",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                       ),
                                                     ),
@@ -386,7 +393,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          "Description",
+                                                          "Deskripsi",
                                                           style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                       ),
                                                     ),
@@ -408,671 +415,119 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                               )
                           ),
 
-                          ListView.builder(
-                            itemCount: widget.pdk.level,
-                            scrollDirection: Axis.vertical,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, i) {
+                          Card(
+                            elevation: 0,
+                            shadowColor: const Color(0xffBCBCBC),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(7),
+                              child: ListView.builder(
+                                itemCount: widget.pdk.level,
+                                scrollDirection: Axis.vertical,
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemBuilder: (context, i) {
 
-                              Map<int, String> approver = {
-                                0: widget.pdk.approver_1,
-                                1: widget.pdk.approver_1,
-                                2: widget.pdk.approver_2,
-                                3: widget.pdk.approver_3,
-                                4: widget.pdk.approver_4,
-                                5: widget.pdk.approver_5,
-                                6: widget.pdk.approver_6
-                              };
+                                  Map<int, String> approver = {
+                                    0: widget.pdk.approver_1,
+                                    1: widget.pdk.approver_1,
+                                    2: widget.pdk.approver_2,
+                                    3: widget.pdk.approver_3,
+                                    4: widget.pdk.approver_4,
+                                    5: widget.pdk.approver_5,
+                                    6: widget.pdk.approver_6
+                                  };
 
-                              Map<int, DateTime?> dateAppr = {
-                                0: widget.pdk.date_approve_1,
-                                1: widget.pdk.date_approve_1,
-                                2: widget.pdk.date_approve_2,
-                                3: widget.pdk.date_approve_3,
-                                4: widget.pdk.date_approve_4,
-                                5: widget.pdk.date_approve_5,
-                                6: widget.pdk.date_approve_6
-                              };
+                                  Map<int, DateTime?> dateAppr = {
+                                    0: widget.pdk.date_approve_1,
+                                    1: widget.pdk.date_approve_1,
+                                    2: widget.pdk.date_approve_2,
+                                    3: widget.pdk.date_approve_3,
+                                    4: widget.pdk.date_approve_4,
+                                    5: widget.pdk.date_approve_5,
+                                    6: widget.pdk.date_approve_6
+                                  };
 
-                              Map<int, String?> userDesc = {
-                                0: widget.pdk.user_desc_1,
-                                1: widget.pdk.user_desc_1,
-                                2: widget.pdk.user_desc_2,
-                                3: widget.pdk.user_desc_3,
-                                4: widget.pdk.user_desc_4,
-                                5: widget.pdk.user_desc_5,
-                                6: widget.pdk.user_desc_6
-                              };
+                                  Map<int, String?> userDesc = {
+                                    0: widget.pdk.user_desc_1,
+                                    1: widget.pdk.user_desc_1,
+                                    2: widget.pdk.user_desc_2,
+                                    3: widget.pdk.user_desc_3,
+                                    4: widget.pdk.user_desc_4,
+                                    5: widget.pdk.user_desc_5,
+                                    6: widget.pdk.user_desc_6
+                                  };
 
-                              if (i+1 == 0) {
-                                return Container();
-                              }
-                              else if(i+1 == widget.user.role_id) {
-                                //APPROVED
-                                if(userDesc[i+1] == null ) {
-                                  return SizedBox(
-                                      width: MediaQuery.of(context).size.width / 1.1,
-                                      child: Card(
-                                        color: Colors.white,
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10)
-                                        ),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(7),
-                                          child: Column(
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Container(
-                                                  child: Table(
-                                                    columnWidths: const <int, TableColumnWidth> {
-                                                      0: FixedColumnWidth(180),
-                                                      1: FixedColumnWidth(118),
-                                                    },
-                                                    children: [
-                                                      TableRow(
-                                                          children: [
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                              child: Text(
-                                                                  approver[i+1].toString(),
-                                                                  style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                              child: Text(
-                                                                "Approved",
-                                                                style: TextStyle(
-                                                                  color: Color(Global.GREEN),
-                                                                  fontFamily: 'book',
-                                                                  fontSize: 13,
-                                                                ),
-                                                                textAlign: TextAlign.end,
-                                                              ),
-                                                            ),
-                                                          ]
-                                                      ),
-                                                      TableRow(
-                                                          children: [
-                                                            Container(),
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 4),
-                                                              child: Align(
-                                                                alignment: Alignment.centerRight,
-                                                                child: Text(
-                                                                    dateAppr[i+1] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(),
-                                                                    // style: Global.getCustomFont(Global.GREY, 13, 'book')
-                                                                    style: const TextStyle(
-                                                                        fontSize: 12,
-                                                                        fontFamily: 'book',
-                                                                        fontStyle: FontStyle.italic,
-                                                                        color: Color(0xff6E6E6E)
-                                                                    )
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ]
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                  );
-                                }
+                                  if(i+1 == widget.user.role_id) {
+                                    //APPROVED
+                                    if(userDesc[i+1] == null ) {
+                                      return SizedBox(
+                                          width: MediaQuery.of(context).size.width / 1.1,
+                                          child: CustomStepper(status: "Approved", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level)
+                                      );
+                                    }
 
-                                //REJECT
-                                else if (userDesc[i+1] != null) {
-                                  return SizedBox(
-                                      width: MediaQuery.of(context).size.width / 1.1,
-                                      child: Card(
-                                        color: Colors.white,
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10)
-                                        ),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(7),
-                                          child: Column(
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Container(
-                                                  child: Table(
-                                                    columnWidths: const <int, TableColumnWidth> {
-                                                      0: FixedColumnWidth(180),
-                                                      1: FixedColumnWidth(118),
-                                                    },
-                                                    children: [
-                                                      TableRow(
-                                                          children: [
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                              child: Text(
-                                                                  approver[i+1].toString(),
-                                                                  style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                              child: Text(
-                                                                "Rejected",
-                                                                style: TextStyle(
-                                                                  color: Color(Global.RED),
-                                                                  fontFamily: 'book',
-                                                                  fontSize: 13,
-                                                                ),
-                                                                textAlign: TextAlign.end,
-                                                              ),
-                                                            ),
-                                                          ]
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                  margin: const EdgeInsets.all(7),
-                                                  padding: const EdgeInsets.all(7),
-                                                  width: MediaQuery.of(context).size.width / 1.1,
-                                                  decoration: BoxDecoration(
-                                                    color: const Color(0xffE7ECF2),
-                                                    borderRadius: BorderRadius.circular(5),
-                                                  ),
-                                                  child: Column(
-                                                      children: [
-                                                        Align(
-                                                          alignment: Alignment.centerLeft,
-                                                          child: Text(
-                                                              userDesc[i+1]!,
-                                                              style: Global.getCustomFont(Global.BLACK, 13, 'book')
-                                                          ),
-                                                        ),
-                                                        Align(
-                                                          alignment: Alignment.centerRight,
-                                                          child: Text(
-                                                              DateFormat('HH:mm, d MMM yyyy').format(widget.pdk.date_approve_1!),
-                                                              // style: Global.getCustomFont(Global.GREY, 13, 'book')
-                                                              style: const TextStyle(
-                                                                  fontSize: 12,
-                                                                  fontFamily: 'book',
-                                                                  fontStyle: FontStyle.italic,
-                                                                  color: Color(0xff6E6E6E)
-                                                              )
-                                                          ),
-                                                        ),
-                                                      ]
-                                                  )
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                  );
-                                }
-                              }
-                              else if (i+1 > widget.user.role_id) {
-                                if(i+1 <= widget.pdk.level) {
-                                  if(userDesc[i+1] == null && dateAppr[i+1] != null) {
-                                    //approved
+                                    //REJECT
+                                    else if (userDesc[i+1] != null) {
+                                      return SizedBox(
+                                          width: MediaQuery.of(context).size.width / 1.1,
+                                          child: CustomStepper(status: "Rejected", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level, desc: userDesc[i+1]!)
+
+                                      );
+                                    }
+                                  }
+                                  else if (i+1 > widget.user.role_id) {
+                                    if(i+1 <= widget.pdk.level) {
+                                      if(userDesc[i+1] == null && dateAppr[i+1] != null) {
+                                        //approved
+                                        return SizedBox(
+                                          width: MediaQuery.of(context).size.width / 1.1,
+                                          child: CustomStepper(status: "Approved", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level)
+                                        );
+                                      }
+                                      else if(userDesc[i+1] != null) {
+                                        // reject
+                                        return SizedBox(
+                                            width: MediaQuery.of(context).size.width / 1.1,
+                                            child: CustomStepper(status: "Rejected", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level, desc: userDesc[i+1]!)
+
+                                        );
+                                      }
+                                      else if(widget.pdk.final_status != null && dateAppr[i+1] == null) {
+                                        return Container();
+                                      } else {
+                                        return SizedBox(
+                                            width: MediaQuery.of(context).size.width / 1.1,
+                                            child: CustomStepper(status: "Waiting", index: i, level: widget.pdk.level)
+                                        );
+                                      }
+                                    }
+                                    else if (userDesc[i+1] != null) {
+                                      // rejected
+                                      return SizedBox(
+                                          width: MediaQuery.of(context).size.width / 1.1,
+                                          child: CustomStepper(status: "Rejected", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level, desc: userDesc[i+1]!)
+                                      );
+                                    }
+                                    else {
+                                      return SizedBox(
+                                          width: MediaQuery.of(context).size.width / 1.1,
+                                          child: CustomStepper(status: "Approved", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level)
+
+                                      );
+                                    }
+                                  }
+                                  else if (i+1 < widget.user.role_id) {
                                     return SizedBox(
                                         width: MediaQuery.of(context).size.width / 1.1,
-                                        child: Card(
-                                          color: Colors.white,
-                                          elevation: 0,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10)
-                                          ),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(7),
-                                            child: Column(
-                                              children: [
-                                                Align(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Container(
-                                                    child: Table(
-                                                      columnWidths: const <int, TableColumnWidth> {
-                                                        0: FixedColumnWidth(180),
-                                                        1: FixedColumnWidth(118),
-                                                      },
-                                                      children: [
-                                                        TableRow(
-                                                            children: [
-                                                              Container(
-                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                                child: Text(
-                                                                    approver[i+1].toString(),
-                                                                    style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                                child: Text(
-                                                                  "Approved",
-                                                                  style: TextStyle(
-                                                                    color: Color(Global.GREEN),
-                                                                    fontFamily: 'book',
-                                                                    fontSize: 13,
-                                                                  ),
-                                                                  textAlign: TextAlign.end,
-                                                                ),
-                                                              ),
-                                                            ]
-                                                        ),
-                                                        TableRow(
-                                                            children: [
-                                                              Container(),
-                                                              Container(
-                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 4),
-                                                                child: Align(
-                                                                  alignment: Alignment.centerRight,
-                                                                  child: Text(
-                                                                      dateAppr[i+1] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(),
-                                                                      // style: Global.getCustomFont(Global.GREY, 13, 'book')
-                                                                      style: const TextStyle(
-                                                                          fontSize: 12,
-                                                                          fontFamily: 'book',
-                                                                          fontStyle: FontStyle.italic,
-                                                                          color: Color(0xff6E6E6E)
-                                                                      )
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ]
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
+                                        child: CustomStepper(status: "Approved", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level)
                                     );
                                   }
-                                  else if(userDesc[i+1] != null) {
-                                    // reject
-                                    return SizedBox(
-                                        width: MediaQuery.of(context).size.width / 1.1,
-                                        child: Card(
-                                          color: Colors.white,
-                                          elevation: 0,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10)
-                                          ),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(7),
-                                            child: Column(
-                                              children: [
-                                                Align(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Container(
-                                                    child: Table(
-                                                      columnWidths: const <int, TableColumnWidth> {
-                                                        0: FixedColumnWidth(180),
-                                                        1: FixedColumnWidth(118),
-                                                      },
-                                                      children: [
-                                                        TableRow(
-                                                            children: [
-                                                              Container(
-                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                                child: Text(
-                                                                    approver[i+1].toString(),
-                                                                    style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                                child: Text(
-                                                                  "Rejected",
-                                                                  style: TextStyle(
-                                                                    color: Color(Global.RED),
-                                                                    fontFamily: 'book',
-                                                                    fontSize: 13,
-                                                                  ),
-                                                                  textAlign: TextAlign.end,
-                                                                ),
-                                                              ),
-                                                            ]
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                    margin: const EdgeInsets.all(7),
-                                                    padding: const EdgeInsets.all(7),
-                                                    width: MediaQuery.of(context).size.width / 1.1,
-                                                    decoration: BoxDecoration(
-                                                      color: const Color(0xffE7ECF2),
-                                                      borderRadius: BorderRadius.circular(5),
-                                                    ),
-                                                    child: Column(
-                                                        children: [
-                                                          Align(
-                                                            alignment: Alignment.centerLeft,
-                                                            child: Text(
-                                                                userDesc[i+1]!,
-                                                                style: Global.getCustomFont(Global.BLACK, 13, 'book')
-                                                            ),
-                                                          ),
-                                                          Align(
-                                                            alignment: Alignment.centerRight,
-                                                            child: Text(
-                                                                DateFormat('HH:mm, d MMM yyyy').format(widget.pdk.date_approve_1!),
-                                                                // style: Global.getCustomFont(Global.GREY, 13, 'book')
-                                                                style: const TextStyle(
-                                                                    fontSize: 12,
-                                                                    fontFamily: 'book',
-                                                                    fontStyle: FontStyle.italic,
-                                                                    color: Color(0xff6E6E6E)
-                                                                )
-                                                            ),
-                                                          ),
-                                                        ]
-                                                    )
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                    );
-                                  }
-                                  else if(widget.pdk.final_status != null && dateAppr[i+1] == null) {
-                                    return Container();
-                                  } else {
-                                    return SizedBox(
-                                        width: MediaQuery.of(context).size.width / 1.1,
-                                        child: Card(
-                                          color: Colors.white,
-                                          elevation: 0,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10)
-                                          ),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(7),
-                                            child: Column(
-                                              children: [
-                                                Align(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Container(
-                                                    child: Table(
-                                                      columnWidths: const <int, TableColumnWidth> {
-                                                        0: FixedColumnWidth(180),
-                                                        1: FixedColumnWidth(118),
-                                                      },
-                                                      children: [
-                                                        TableRow(
-                                                            children: [
-                                                              Container(
-                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                                child: Text(
-                                                                    approver[i+1].toString(),
-                                                                    style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                                child: Text(
-                                                                  "Waiting",
-                                                                  style: TextStyle(
-                                                                    color: Color(Global.YELLOW),
-                                                                    fontFamily: 'book',
-                                                                    fontSize: 13,
-                                                                  ),
-                                                                  textAlign: TextAlign.end,
-                                                                ),
-                                                              ),
-                                                            ]
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                    );
-                                  }
-                                }
-                                else if (userDesc[i+1] != null) {
-                                  return SizedBox(
-                                      width: MediaQuery.of(context).size.width / 1.1,
-                                      child: Card(
-                                        color: Colors.white,
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10)
-                                        ),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(7),
-                                          child: Column(
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Container(
-                                                  child: Table(
-                                                    columnWidths: const <int, TableColumnWidth> {
-                                                      0: FixedColumnWidth(180),
-                                                      1: FixedColumnWidth(118),
-                                                    },
-                                                    children: [
-                                                      TableRow(
-                                                          children: [
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                              child: Text(
-                                                                  approver[i+1].toString(),
-                                                                  style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                              child: Text(
-                                                                "Rejected",
-                                                                style: TextStyle(
-                                                                  color: Color(Global.RED),
-                                                                  fontFamily: 'book',
-                                                                  fontSize: 13,
-                                                                ),
-                                                                textAlign: TextAlign.end,
-                                                              ),
-                                                            ),
-                                                          ]
-                                                      ),
-                                                      TableRow(
-                                                          children: [
-                                                            Container(),
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 4),
-                                                              child: Align(
-                                                                alignment: Alignment.centerRight,
-                                                                child: Text(
-                                                                    dateAppr[i+1] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(),
-                                                                    // style: Global.getCustomFont(Global.GREY, 13, 'book')
-                                                                    style: const TextStyle(
-                                                                        fontSize: 12,
-                                                                        fontFamily: 'book',
-                                                                        fontStyle: FontStyle.italic,
-                                                                        color: Color(0xff6E6E6E)
-                                                                    )
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ]
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                  );
-                                }
-                                else {
-                                  return SizedBox(
-                                      width: MediaQuery.of(context).size.width / 1.1,
-                                      child: Card(
-                                        color: Colors.white,
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10)
-                                        ),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(7),
-                                          child: Column(
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Container(
-                                                  child: Table(
-                                                    columnWidths: const <int, TableColumnWidth> {
-                                                      0: FixedColumnWidth(180),
-                                                      1: FixedColumnWidth(118),
-                                                    },
-                                                    children: [
-                                                      TableRow(
-                                                          children: [
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                              child: Text(
-                                                                  approver[i+1].toString(),
-                                                                  style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                              child: Text(
-                                                                "Approved",
-                                                                style: TextStyle(
-                                                                  color: Color(Global.GREEN),
-                                                                  fontFamily: 'book',
-                                                                  fontSize: 13,
-                                                                ),
-                                                                textAlign: TextAlign.end,
-                                                              ),
-                                                            ),
-                                                          ]
-                                                      ),
-                                                      TableRow(
-                                                          children: [
-                                                            Container(),
-                                                            Container(
-                                                              padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 4),
-                                                              child: Align(
-                                                                alignment: Alignment.centerRight,
-                                                                child: Text(
-                                                                    dateAppr[i+1] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(),
-                                                                    // style: Global.getCustomFont(Global.GREY, 13, 'book')
-                                                                    style: const TextStyle(
-                                                                        fontSize: 12,
-                                                                        fontFamily: 'book',
-                                                                        fontStyle: FontStyle.italic,
-                                                                        color: Color(0xff6E6E6E)
-                                                                    )
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ]
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                  );
-                                }
-                              }
-                              else if (i+1 < widget.user.role_id) {
-                                return SizedBox(
-                                    width: MediaQuery.of(context).size.width / 1.1,
-                                    child: Card(
-                                      color: Colors.white,
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10)
-                                      ),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(7),
-                                        child: Column(
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Container(
-                                                child: Table(
-                                                  columnWidths: const <int, TableColumnWidth> {
-                                                    0: FixedColumnWidth(180),
-                                                    1: FixedColumnWidth(118),
-                                                  },
-                                                  children: [
-                                                    TableRow(
-                                                        children: [
-                                                          Container(
-                                                            padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                            child: Text(
-                                                                approver[i+1].toString(),
-                                                                style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
-                                                            ),
-                                                          ),
-                                                          Container(
-                                                            padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
-                                                            child: Text(
-                                                              "Approved",
-                                                              style: TextStyle(
-                                                                color: Color(Global.GREEN),
-                                                                fontFamily: 'book',
-                                                                fontSize: 13,
-                                                              ),
-                                                              textAlign: TextAlign.end,
-                                                            ),
-                                                          ),
-                                                        ]
-                                                    ),
-                                                    TableRow(
-                                                        children: [
-                                                          Container(),
-                                                          Container(
-                                                            padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 4),
-                                                            child: Align(
-                                                              alignment: Alignment.centerRight,
-                                                              child: Text(
-                                                                  dateAppr[i+1] == null ? "" : DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(),
-                                                                  // style: Global.getCustomFont(Global.GREY, 13, 'book')
-                                                                  style: const TextStyle(
-                                                                      fontSize: 12,
-                                                                      fontFamily: 'book',
-                                                                      fontStyle: FontStyle.italic,
-                                                                      color: Color(0xff6E6E6E)
-                                                                  )
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ]
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                );
-                              }
-                            },
+                                },
+                              ),
+                            ),
                           ),
 
                           ListView.builder(
@@ -1104,7 +559,25 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                           Container(
                                                             padding: const EdgeInsets.all(4),
                                                             child: Text(
-                                                                "Item Product",
+                                                                "Kode Produk",
+                                                                style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            padding: const EdgeInsets.only(left: 4, top: 4, right: 4, bottom: 8),
+                                                            child: Text(
+                                                                detailPDK[i].kode_barang,
+                                                                style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                            ),
+                                                          )
+                                                        ]
+                                                    ),
+                                                    TableRow(
+                                                        children: [
+                                                          Container(
+                                                            padding: const EdgeInsets.all(4),
+                                                            child: Text(
+                                                                "Item Produk",
                                                                 style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                             ),
                                                           ),
@@ -1173,14 +646,14 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                           Container(
                                                             padding: const EdgeInsets.all(4),
                                                             child: Text(
-                                                                "HNA",
+                                                                "HNA (Rp)",
                                                                 style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                             ),
                                                           ),
                                                           Container(
                                                             padding: const EdgeInsets.all(4),
                                                             child: Text(
-                                                                currencyFormatter.format(detailPDK[i].hna).toString(),
+                                                                convertToIdr(double.parse(detailPDK[i].hna).ceil(), 0),
                                                                 style: Global.getCustomFont(Global.BLACK, 13, 'book')
                                                             ),
                                                           )
@@ -1198,7 +671,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                           Container(
                                                             padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                             child: Text(
-                                                                currencyFormatter.format(detailPDK[i].total_sales).toString(),
+                                                                convertToIdr(double.parse(detailPDK[i].total_sales).ceil(), 0),
                                                                 style: Global.getCustomFont(Global.BLACK, 13, 'bold')
                                                             ),
                                                           )
@@ -1209,7 +682,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                           Container(
                                                             padding: const EdgeInsets.only(top: 4, left: 4),
                                                             child: Text(
-                                                                "Discount",
+                                                                "Diskon",
                                                                 style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                             ),
                                                           ),
@@ -1278,14 +751,14 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                           Container(
                                                             padding: const EdgeInsets.only(top:4, right: 4, bottom: 4, left: 20),
                                                             child: Text(
-                                                                "Outlet",
+                                                                "Diskon Outlet",
                                                                 style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                             ),
                                                           ),
                                                           Container(
                                                             padding: const EdgeInsets.all(4),
                                                             child: Text(
-                                                                "${detailPDK[i].percent_disc_outlet} %",
+                                                                "${detailPDK[i].percent_disc_outlet}%",
                                                                 style: Global.getCustomFont(Global.BLACK, 13, 'book')
                                                             ),
                                                           )
@@ -1296,14 +769,14 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                           Container(
                                                             padding: const EdgeInsets.only(top:4, right: 4, bottom: 4, left: 20),
                                                             child: Text(
-                                                                "Bonus Discount",
+                                                                "Diskon Bonus",
                                                                 style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                             ),
                                                           ),
                                                           Container(
                                                             padding: const EdgeInsets.all(4),
                                                             child: Text(
-                                                                "${detailPDK[i].percent_disc_konversi} %",
+                                                                "${detailPDK[i].percent_disc_konversi}%",
                                                                 style: Global.getCustomFont(Global.BLACK, 13, 'book')
                                                             ),
                                                           )
@@ -1314,14 +787,14 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                           Container(
                                                             padding: const EdgeInsets.all(4),
                                                             child: Text(
-                                                                "Total Discount",
+                                                                "Diskon Total",
                                                                 style: Global.getCustomFont(Global.DARK_GREY, 13, 'bold')
                                                             ),
                                                           ),
                                                           Container(
                                                             padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 8),
                                                             child: Text(
-                                                                "${detailPDK[i].percent_disc_rn + detailPDK[i].percent_disc_konversi + detailPDK[i].percent_disc_outlet} %",
+                                                                "${detailPDK[i].total_disc}%",
                                                                 style: Global.getCustomFont(Global.BLACK, 13, 'bold')
                                                             ),
                                                           )

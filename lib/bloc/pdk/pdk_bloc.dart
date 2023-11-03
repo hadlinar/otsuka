@@ -61,7 +61,7 @@ class PDKBloc extends Bloc<PDKBlocEvent, PDKBlocState> {
     try {
       final response = await _PDKRepository.getListDone("Bearer $token");
       if(response.message == "ok") {
-        yield GetListDoneState(response.result);
+        yield GetListDoneState(response.result!);
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 500) {
@@ -95,8 +95,8 @@ class PDKBloc extends Bloc<PDKBlocEvent, PDKBlocState> {
     final token = _sharedPreferences.getString("access_token");
     try {
       final response = await _PDKRepository.approvePDK("Bearer $token", null, e.date, e.id, e.cat, e.branch, e.disc, e.idDet);
-      print(response.message);
       if(response.message == "updated") {
+        print("success");
         yield SuccessPostApproveState();
       }
     } on DioException catch (e) {

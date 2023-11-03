@@ -28,12 +28,14 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
 
 UserResponse _$UserResponseFromJson(Map<String, dynamic> json) => UserResponse(
       json['message'] as String,
+      json['check'] as String,
       User.fromJson(json['result'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$UserResponseToJson(UserResponse instance) =>
     <String, dynamic>{
       'message': instance.message,
+      'check': instance.check,
       'result': instance.result,
     };
 

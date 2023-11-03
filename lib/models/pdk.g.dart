@@ -140,12 +140,12 @@ DetailPDK _$DetailPDKFromJson(Map<String, dynamic> json) => DetailPDK(
       id_ref: json['id_ref'] as int,
       kode_barang: json['kode_barang'] as String,
       qty: json['qty'] as int,
-      hna: json['hna'] as num,
-      total_sales: json['total_sales'] as num,
-      percent_disc_rn: json['percent_disc_rn'] as num,
-      percent_disc_outlet: json['percent_disc_outlet'] as num,
-      percent_disc_konversi: json['percent_disc_konversi'] as num,
-      total_disc: json['total_disc'] as num,
+      hna: json['hna'] as String,
+      total_sales: json['total_sales'] as String,
+      percent_disc_rn: json['percent_disc_rn'] as String,
+      percent_disc_outlet: json['percent_disc_outlet'] as String,
+      percent_disc_konversi: json['percent_disc_konversi'] as String,
+      total_disc: json['total_disc'] as String,
       prod_name: json['prod_name'] as String,
     );
 

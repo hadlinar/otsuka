@@ -39,7 +39,6 @@ class _LoginPage extends State<Login> {
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginBlocState>(
       listener: (context, state) {
-        print("login $state");
         if (state is LoadingLoginState) {
           showDialog(
               context: context,
