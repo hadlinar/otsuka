@@ -91,8 +91,6 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
           check = state.check;
         });
 
-        print(check);
-
         final snackBar = SnackBar(
           elevation: 0,
           behavior: SnackBarBehavior.floating,

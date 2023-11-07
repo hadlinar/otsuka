@@ -96,7 +96,6 @@ class PDKBloc extends Bloc<PDKBlocEvent, PDKBlocState> {
     try {
       final response = await _PDKRepository.approvePDK("Bearer $token", null, e.date, e.id, e.cat, e.branch, e.disc, e.idDet);
       if(response.message == "updated") {
-        print("success");
         yield SuccessPostApproveState();
       }
     } on DioException catch (e) {

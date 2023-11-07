@@ -7,12 +7,12 @@ import 'ediscount_apps.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  const url = "http://10.0.2.2:3000/otsuka/ediscount";
+  const url = "http://103.140.207.25:3000/otsuka/ediscount";
   final appModule = AppModule(url);
   await appModule.setup();
   final rootApp = appModule.configureBloc(EdiscountApps());
 
-  final app = AppConfig(urlEndpoint: url, buildFlavor: 'development', child: rootApp);
+  final app = AppConfig(urlEndpoint: url, buildFlavor: 'production', child: rootApp);
   runApp(app);
 }
 

@@ -536,6 +536,8 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, i) {
+                                // print("test");
+                                // print(detailPDK[i].kode_barang);
                                 return Card(
                                     elevation: 0,
                                     shadowColor: const Color(0xffBCBCBC),

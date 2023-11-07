@@ -337,6 +337,7 @@ class _ChangePasswordPage extends State<ChangePasswordPage> {
                                           }
                                       );
                                     } else {
+                                      print(currentPasswordController.text);
                                       BlocProvider.of<UserBloc>(context).add(
                                           ChangePasswordEvent(
                                               currentPasswordController.text,
