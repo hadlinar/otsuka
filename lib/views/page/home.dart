@@ -34,6 +34,9 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
   List<PDK> pdk = [];
   List<PDK> donePdk = [];
 
+  List<PDK> searchPdk = [];
+  List<PDK> searchDonePdk = [];
+
   late GlobalKey<ScaffoldState> _scaffoldKey;
 
   User? user;
@@ -46,7 +49,15 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
   late StreamSubscription streamUser;
   late StreamSubscription streamPdk;
 
-  late final SharedPreferences _sharedPreferences;
+  TextEditingController searchController = TextEditingController();
+  String search = '';
+
+  void filterSearchResults(String query) {
+    setState(() {
+      searchPdk = pdk.where((item) => item.no_draft.toLowerCase().contains(query.toLowerCase()) || item.kode_pelanggan.toLowerCase().contains(query.toLowerCase()) || item.cust.toLowerCase().contains(query.toLowerCase())).toList();
+      searchDonePdk = donePdk.where((item) => item.no_draft.toLowerCase().contains(query.toLowerCase()) || item.kode_pelanggan.toLowerCase().contains(query.toLowerCase()) || item.cust.toLowerCase().contains(query.toLowerCase())).toList();
+    });
+  }
 
   @override
   void initState() {
@@ -129,11 +140,13 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
       if (state is GetListProcessState) {
         setState(() {
           pdk = state.getListProcess;
+          searchPdk = state.getListProcess;
         });
       }
       if (state is GetListDoneState) {
         setState(() {
           donePdk = state.getListDone;
+          searchDonePdk = state.getListDone;
         });
       }
     });
@@ -181,7 +194,11 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
             ),
           ),
         ) :
-        Scaffold(
+        GestureDetector (
+            onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+        child: Scaffold(
             key: _scaffoldKey,
             backgroundColor: Color(Global.BLUE),
             appBar: AppBar(
@@ -357,15 +374,46 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                 backgroundColor: Colors.white,
                                 child: Column(
                               children: [
+
+                                SizedBox(
+                                  height: 50,
+                                  child: Container(
+                                    margin: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
+                                    child: TextFormField(
+                                      style: Global.getCustomFont(Global.BLACK, 14, 'medium'),
+                                      maxLines: 1,
+                                      controller: searchController,
+                                      onChanged: (text) {
+                                        filterSearchResults(text);
+                                      },
+                                      decoration: InputDecoration(
+                                        labelText: "Search",
+                                        filled: true,
+                                        fillColor: Color(Global.GREY),
+                                        alignLabelWithHint: true,
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: BorderSide(
+                                              color: Color(Global.GREY),
+                                            )),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: BorderSide(
+                                              color: Color(Global.GREY),
+                                            )),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                                 Expanded(
                                   child: pdk.isNotEmpty ? ListView.builder(
-                                    itemCount: pdk.length,
+                                    itemCount: searchPdk.length,
                                     scrollDirection: Axis.vertical,
                                     physics: const AlwaysScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemBuilder: (context, i) {
                                       final detailPage = DetailPendingPDK(
-                                        pdk[i],
+                                        searchPdk[i],
                                         user,
                                         successPostPDK: (int resMessage, BuildContext ctx) {
                                           if (resMessage == 200) {
@@ -383,7 +431,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                               builder: (context) => detailPage
                                           ));
                                         },
-                                        child: Global.getCardList(pdk[i].kode_pelanggan, pdk[i].branch, pdk[i].cust, pdk[i].date),
+                                        child: Global.getCardList(searchPdk[i].no_draft, searchPdk[i].branch, searchPdk[i].cust, searchPdk[i].date),
                                       );
                                     },
                                   ) : ListView.builder(
@@ -438,22 +486,52 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                               backgroundColor: Colors.white,
                               child: Column(
                                 children: [
+                                  SizedBox(
+                                    height: 50,
+                                    child: Container(
+                                      margin: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
+                                      child: TextFormField(
+                                        style: Global.getCustomFont(Global.BLACK, 14, 'medium'),
+                                        maxLines: 1,
+                                        controller: searchController,
+                                        onChanged: (text) {
+                                          filterSearchResults(text);
+                                        },
+                                        decoration: InputDecoration(
+                                          labelText: "Search",
+                                          filled: true,
+                                          fillColor: Color(Global.GREY),
+                                          alignLabelWithHint: true,
+                                          enabledBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                color: Color(Global.GREY),
+                                              )),
+                                          focusedBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                              borderSide: BorderSide(
+                                                color: Color(Global.GREY),
+                                              )),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   Expanded(
                                       child: donePdk.isNotEmpty ? Container(
                                         margin: const EdgeInsets.only(bottom: 7),
                                         child: ListView.builder(
-                                          itemCount: donePdk.length,
+                                          itemCount: searchDonePdk.length,
                                           scrollDirection: Axis.vertical,
                                           shrinkWrap: true,
                                           itemBuilder: (context, i) {
-                                            final donePage = DetailDonePDK(donePdk[i], user!);
+                                            final donePage = DetailDonePDK(searchDonePdk[i], user!);
                                             return InkWell(
                                               onTap: (){
                                                 Navigator.push(context, MaterialPageRoute(
                                                     builder: (context) => donePage
                                                 ));
                                               },
-                                              child: Global.getDoneCardList(donePdk[i].kode_pelanggan, donePdk[i].branch, donePdk[i].cust, donePdk[i].date, donePdk[i].final_status),
+                                              child: Global.getDoneCardList(searchDonePdk[i].kode_pelanggan, searchDonePdk[i].branch, searchDonePdk[i].cust, searchDonePdk[i].date, searchDonePdk[i].final_status),
                                             );
                                           },
                                         ),
@@ -511,6 +589,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
               ),
             )
         )
+      )
     );
   }
 }

@@ -14,6 +14,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       kategori_otsuka: json['kategori_otsuka'] as String,
       role_id: json['role_id'] as int,
       is_active: json['is_active'] as int,
+      flg_am: json['flg_am'] as String?,
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -24,6 +25,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'kategori_otsuka': instance.kategori_otsuka,
       'role_id': instance.role_id,
       'is_active': instance.is_active,
+      'flg_am': instance.flg_am,
     };
 
 UserResponse _$UserResponseFromJson(Map<String, dynamic> json) => UserResponse(

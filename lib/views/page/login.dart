@@ -135,24 +135,6 @@ class _LoginPage extends State<Login> {
               children: [
                 Stack(
                   children: [
-                    // SizedBox(
-                    //   width: double.infinity,
-                    //   child: SvgPicture.asset(
-                    //       'assets/images/Login_background.svg',
-                    //       fit: BoxFit.fitWidth
-                    //   ),
-                    // ),
-                    // Align(
-                    //   alignment: Alignment.center,
-                    //   child: Container(
-                    //       padding: const EdgeInsets.only(left: 31, right: 31),
-                    //       margin: const EdgeInsets.only(top: 330),
-                    //       child: Text(
-                    //           "LOGO",
-                    //           style: Global.getCustomFont(Global.BLACK, 30, 'medium')
-                    //       )
-                    //   ),
-                    // ),
                     Align(
                         child: Container(
                           margin: const EdgeInsets.only(top: 140),

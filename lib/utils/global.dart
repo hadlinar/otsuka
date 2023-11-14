@@ -6,8 +6,8 @@ import 'package:intl/intl.dart';
 
 class Global {
   // static const String baseUrl = "http://10.0.2.2:3000/otsuka/ediscount";
-  static const String baseUrl = "http://103.140.207.25:3000/otsuka/ediscount";
-  // static const String baseUrl = "http://172.20.60.14:3000/otsuka/ediscount";
+  // static const String baseUrl = "http://103.140.207.25:3000/otsuka/ediscount";
+  static const String baseUrl = "http://172.20.60.14:3000/otsuka/ediscount";
 
   static String ACCESS_TOKEN = "access_token";
 
@@ -124,7 +124,7 @@ class Global {
     );
   }
 
-  static Card getCardList(String kodPel, String cabang, String cust, DateTime date) {
+  static Card getCardList(String draft, String cabang, String cust, DateTime date) {
     return Card(
         elevation: 0,
         shadowColor: const Color(0xffBCBCBC),
@@ -146,7 +146,7 @@ class Global {
                   padding: const EdgeInsets.only(top: 8),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: Text(kodPel, style: Global.getCustomFont(DARK_GREY, 14, 'book')),
+                    child: Text(draft, style: Global.getCustomFont(DARK_GREY, 14, 'book')),
                   ),
                 ),
                 Container(

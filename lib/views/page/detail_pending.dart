@@ -641,122 +641,11 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                     ),
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                              // double.parse(detailPDK[i].total_sales).ceil().toString(),
-                                                              "${double.parse(listDiscController[i].text)}%",
-                                                              style: Global.getCustomFont(Global.BLACK, 13, 'book')
-                                                          ),
-                                                          widget.user?.role_id == 3  && widget.pdk.level > 3 ? InkWell(
-                                                            onTap: (){
-                                                              showDialog(
-                                                                context: context,
-                                                                builder: (BuildContext context) {
-                                                                  return AlertDialog(
-                                                                    shape: const RoundedRectangleBorder(
-                                                                        borderRadius: BorderRadius.all(Radius.circular(10)
-                                                                        )
-                                                                    ),
-                                                                    content: SizedBox(
-                                                                      width: 322,
-                                                                      child: Column(
-                                                                        mainAxisSize: MainAxisSize.min,
-                                                                        children: <Widget>[
-                                                                          CustomTextField(label: "Diskon", controller: listDiscController[i]),
-                                                                          Align(
-                                                                            alignment: Alignment.center,
-                                                                            child: Container(
-                                                                              padding: const EdgeInsets.only(left: 18, right: 18),
-                                                                              color: Colors.white,
-                                                                              child: Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                  children: [
-                                                                                    SizedBox(
-                                                                                      width: 83,
-                                                                                      child: ElevatedButton(
-                                                                                          style: ButtonStyle(
-                                                                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                                                              RoundedRectangleBorder(
-                                                                                                  borderRadius: BorderRadius.circular(18.0),
-                                                                                                  side: BorderSide(
-                                                                                                      color: Color(Global.RED),
-                                                                                                      width: 3
-                                                                                                  )
-                                                                                              ),
-                                                                                            ),
-                                                                                            backgroundColor: MaterialStateProperty.all<Color>(Color(Global.WHITE)),
-                                                                                          ),
-                                                                                          onPressed: () {
-                                                                                            Navigator.of(context).pop();
-                                                                                          },
-                                                                                          child: Text(
-                                                                                            "Cancel",
-                                                                                            style: TextStyle(
-                                                                                                color: Color(Global.RED),
-                                                                                                fontFamily: 'bold',
-                                                                                                fontSize: 13
-                                                                                            ),
-                                                                                          )
-                                                                                      ),
-                                                                                    ),
-                                                                                    Container(
-                                                                                      width: 14,
-                                                                                    ),
-                                                                                    SizedBox(
-                                                                                      width: 93,
-                                                                                      child: ElevatedButton(
-                                                                                          style: ButtonStyle(
-                                                                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                                                              RoundedRectangleBorder(
-                                                                                                  borderRadius: BorderRadius.circular(18.0),
-                                                                                                  side: BorderSide(color: Color(Global.BLUE))
-                                                                                              ),
-                                                                                            ),
-                                                                                            backgroundColor: MaterialStateProperty.all<Color>(Color(Global.BLUE)),
-                                                                                          ),
-                                                                                          onPressed: () {
-                                                                                            setState(() {
-                                                                                              _discChanged = true;
-                                                                                              disc[i] = listDiscController[i].text;
-                                                                                            });
-                                                                                            Navigator.of(context).pop();
-                                                                                          },
-                                                                                          child: const Text(
-                                                                                            "Save",
-                                                                                            style: TextStyle(
-                                                                                                color: Colors.white,
-                                                                                                fontFamily: 'bold',
-                                                                                                fontSize: 13
-                                                                                            ),
-                                                                                          )
-                                                                                      ),
-                                                                                    ),
-                                                                                  ]
-                                                                              ),
-                                                                            ),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                }
-                                                              );
-                                                            },
-                                                            child: Text(
-                                                                "ubah",
-                                                                style: TextStyle(
-                                                                  decoration: TextDecoration.underline,
-                                                                  color: Color(Global.BLUE),
-                                                                  fontSize: 13,
-                                                                  fontFamily: 'book'
-                                                                )
-                                                            ),
-                                                          ) : Container(),
-                                                        ],
-                                                      )
+                                                      child: Text(
+                                                        // double.parse(detailPDK[i].total_sales).ceil().toString(),
+                                                          "${double.parse(listDiscController[i].text)}%",
+                                                          style: Global.getCustomFont(Global.BLACK, 13, 'book')
+                                                      ),
 
                                                     )
                                                   ]
@@ -843,7 +732,37 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                           );
                         }
                     ),
-                    SizedBox(
+
+                    widget.user?.role_id == 2 && widget.user?.flg_am == null ? SizedBox(
+                        width: MediaQuery.of(context).size.width / 1.1,
+                        child: Card(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          elevation: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(7),
+                            child: TextFormField(
+                              style: Global.getCustomFont(Global.BLACK, 13, 'medium'),
+                              maxLines: 5,
+                              maxLength: 200,
+                              controller: notesController,
+                              onChanged: (text) {
+                                notes = text;
+                              },
+                              decoration: InputDecoration(
+                                labelText: "Notes",
+                                alignLabelWithHint: true,
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius .circular(10),
+                                    borderSide: BorderSide()),
+                              ),
+                            ),
+                          ),
+                        )
+                    ) : Container(),
+                    widget.user?.flg_am == null ? SizedBox(
                         width: MediaQuery.of(context).size.width / 1.1,
                         child: Card(
                             color: Colors.white,
@@ -1024,46 +943,15 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                   backgroundColor: MaterialStateProperty.all<Color>(Color(Global.BLUE)),
                                                 ),
                                                 onPressed: () {
-                                                  (_discChanged) ? (
-                                                      widget.user?.role_id == 3 ? ({
-                                                        for(int i=0; i < disc.length; i++) {
-                                                          BlocProvider.of<PDKBloc>(context).add(
-                                                              PostApprovePDKEvent(
-                                                                  null,
-                                                                  DateTime.now().toString(),
-                                                                  widget.pdk.id,
-                                                                  widget.pdk.kategori_otsuka!,
-                                                                  widget.pdk.branch_id,
-                                                                  disc[i].toString(),
-                                                                  detailPDK[i].id
-                                                              )
-                                                          )
-                                                        },
-                                                        _discChanged = false
-                                                      }) : ({
-                                                        BlocProvider.of<PDKBloc>(context).add(
-                                                            PostApprovePDKEvent(
-                                                                null,
-                                                                DateTime.now().toString(),
-                                                                widget.pdk.id,
-                                                                widget.pdk.kategori_otsuka!,
-                                                                widget.pdk.branch_id,
-                                                                '0.0',
-                                                                0
-                                                            )
-                                                        ),
-                                                      })
-                                                  ) : (
-                                                      BlocProvider.of<PDKBloc>(context).add(
-                                                          PostApprovePDKEvent(
-                                                              null,
-                                                              DateTime.now().toString(),
-                                                              widget.pdk.id,
-                                                              widget.pdk.kategori_otsuka!,
-                                                              widget.pdk.branch_id,
-                                                              '0.0',
-                                                              0
-                                                          )
+                                                  BlocProvider.of<PDKBloc>(context).add(
+                                                      PostApprovePDKEvent(
+                                                          notes == "" ? null : notes,
+                                                          DateTime.now().toString(),
+                                                          widget.pdk.id,
+                                                          widget.pdk.kategori_otsuka!,
+                                                          widget.pdk.branch_id,
+                                                          '0.0',
+                                                          0
                                                       )
                                                   );
                                                 },
@@ -1084,7 +972,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                               ],
                             )
                         )
-                    ),
+                    ) : Container(),
                   ],
                 )
             ),

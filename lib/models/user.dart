@@ -18,6 +18,7 @@ class User {
   String kategori_otsuka;
   int role_id;
   int is_active;
+  String? flg_am;
 
   User({
     required this.username,
@@ -26,7 +27,8 @@ class User {
     required this.branch_id,
     required this.kategori_otsuka,
     required this.role_id,
-    required this.is_active
+    required this.is_active,
+    this.flg_am
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
