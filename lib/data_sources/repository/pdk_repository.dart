@@ -34,7 +34,7 @@ class PDKRepository {
   // "branch": "44",
   // "disc": 0
 
-  Future<ApprovalResponse> approvePDK(String token, String desc, String date, int id, String cat, String branch, String disc, int idDet) async {
+  Future<ApprovalResponse> approvePDK(String token, String? desc, String date, int id, String cat, String branch, String disc, int idDet) async {
     final response = await pdkService.postApprove(token, id, idDet, {
       "desc": desc,
       "date": date,

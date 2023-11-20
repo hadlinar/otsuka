@@ -943,6 +943,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                   backgroundColor: MaterialStateProperty.all<Color>(Color(Global.BLUE)),
                                                 ),
                                                 onPressed: () {
+                                                  print("approve");
                                                   BlocProvider.of<PDKBloc>(context).add(
                                                       PostApprovePDKEvent(
                                                           notes == "" ? null : notes,
