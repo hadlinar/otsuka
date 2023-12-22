@@ -37,7 +37,6 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
   GlobalKey<FormState> _formKey = GlobalKey();
   String notes = '';
   bool _val = false;
-  bool _discChanged = false;
 
   static String convertToIdr(dynamic number, int decimalDigit) {
     NumberFormat currencyFormatter = NumberFormat.currency(
@@ -117,7 +116,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                             shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(10))
                             ),
-                            content: Container(
+                            content: SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -151,7 +150,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                             Container(
                                               padding: const EdgeInsets.all(4),
                                               child: Text(
-                                                  "PDK Maker",
+                                                  "Maker",
                                                   style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                               ),
                                             ),
@@ -198,6 +197,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                   builder: (BuildContext context) {
                     return Global.defaultModal(() {
                       Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                       widget.successPostPDK!(200, context);
                     }, context, Global.IC_CHECK, "Approved", "Ok", false);
                   }
@@ -211,6 +211,8 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                       notes = '';
                       notesController.text = "";
                       _val = false;
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                       widget.successPostPDK!(200, context);
                     }, context, Global.IC_CHECK, "Rejected", "Ok", false);
                   }
@@ -292,7 +294,7 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                               Container(
                                                 padding: const EdgeInsets.all(4),
                                                 child: Text(
-                                                    DateFormat('HH:mm, d MMM yyyy').format(widget.pdk.date),
+                                                    DateFormat('d MMM yyyy').format(widget.pdk.date),
                                                     style: Global.getCustomFont(Global.BLACK, 13, 'book')
                                                 ),
                                               )
@@ -431,19 +433,36 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                 6: widget.pdk.date_approve_6
                               };
 
-                              if(i+1 == widget.user?.role_id || i+1 == 0) {
-                                return Container();
-                              }else if(i+1 < widget.user!.role_id) {
-                                return SizedBox(
-                                    width: MediaQuery.of(context).size.width / 1.1,
-                                    child: CustomStepper(status: "Approved", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level)
-                                );
-                              }
-                              else if(i+1 > widget.user!.role_id && i+1 <= widget.pdk.level) {
-                                return SizedBox(
-                                    width: MediaQuery.of(context).size.width / 1.1,
-                                    child: CustomStepper(status: "Waiting", index: i, level: widget.pdk.level)
-                                );
+                              if(widget.pdk.level == 9) {
+                                if(i+1 == widget.user?.role_id || i+1 == 0 || i+1 == 2) {
+                                  return Container();
+                                }else if(i+1 < widget.user!.role_id) {
+                                  return SizedBox(
+                                      width: MediaQuery.of(context).size.width / 1.1,
+                                      child: CustomStepper(status: "Approved", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level)
+                                  );
+                                }
+                                else if(i+1 > widget.user!.role_id && i+1 <= 3) {
+                                  return SizedBox(
+                                      width: MediaQuery.of(context).size.width / 1.1,
+                                      child: CustomStepper(status: "Waiting", index: i, level: 3)
+                                  );
+                                }
+                              } else {
+                                if(i+1 == widget.user?.role_id || i+1 == 0) {
+                                  return Container();
+                                }else if(i+1 < widget.user!.role_id) {
+                                  return SizedBox(
+                                      width: MediaQuery.of(context).size.width / 1.1,
+                                      child: CustomStepper(status: "Approved", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level)
+                                  );
+                                }
+                                else if(i+1 > widget.user!.role_id && i+1 <= widget.pdk.level) {
+                                  return SizedBox(
+                                      width: MediaQuery.of(context).size.width / 1.1,
+                                      child: CustomStepper(status: "Waiting", index: i, level: widget.pdk.level)
+                                  );
+                                }
                               }
                             },
                           ),
@@ -943,7 +962,6 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                                   backgroundColor: MaterialStateProperty.all<Color>(Color(Global.BLUE)),
                                                 ),
                                                 onPressed: () {
-                                                  print("approve");
                                                   BlocProvider.of<PDKBloc>(context).add(
                                                       PostApprovePDKEvent(
                                                           notes == "" ? null : notes,

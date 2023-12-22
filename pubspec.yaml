@@ -13,8 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   dio: ^5.1.2
   http: ^0.13.4
-  flutter_bloc: ^7.0.0
-  equatable: ^2.0.3
+  flutter_bloc: ^8.0.0
   get_it: ^7.2.0
   retrofit_generator: ^6.0.0+2
   build_runner: ^2.3.3
@@ -32,6 +31,7 @@ dependencies:
   awesome_snackbar_content: ^0.1.1
   rename: ^3.0.1
   searchfield: ^0.8.7
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +53,7 @@ flutter:
      - assets/icons/ic_warning.png
      - assets/icons/ic_profile.png
      - assets/icons/ic_empty.png
+     - assets/icons/ic_filter.png
 
   fonts:
      - family: book

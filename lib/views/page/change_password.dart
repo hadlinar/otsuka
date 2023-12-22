@@ -120,8 +120,7 @@ class _ChangePasswordPage extends State<ChangePasswordPage> {
                   return Global.defaultModal(() {
                     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
                         builder: (context) => Home()
-                    ),
-                        (Route route) => false);
+                    ), (Route route) => false);
                   }, context, Global.IC_CHECK, "Saved", "Ok", false);
                 }
             );

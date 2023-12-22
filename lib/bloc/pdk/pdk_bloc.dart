@@ -15,117 +15,100 @@ class PDKBloc extends Bloc<PDKBlocEvent, PDKBlocState> {
 
   static create(PDKRepository pdkRepository, SharedPreferences sharedPreferences) => PDKBloc(pdkRepository, sharedPreferences);
 
-  PDKBloc(this._PDKRepository, this._sharedPreferences) : super(LoadingPDKState());
-
-  @override
-  Stream<PDKBlocState> mapEventToState(PDKBlocEvent event) async* {
-    if(event is GetProcessPDKEvent) {
-      yield* _getProgressToState(event);
-    }
-    if(event is GetDonePDKEvent) {
-      yield* _getDoneToState(event);
-    }
-    if(event is GetDetailPDKEvent) {
-      yield* _getDetailToState(event);
-    }
-    if(event is PostApprovePDKEvent) {
-      yield* _postApproveToState(event);
-    }
-    if(event is PostRejectPDKEvent) {
-      yield* _postRejectToState(event);
-    }
+  PDKBloc(this._PDKRepository, this._sharedPreferences) : super(LoadingPDKState()) {
+    on<GetProcessPDKEvent>(_getProgressToState);
+    on<GetDonePDKEvent>(_getDoneToState);
+    on<GetDetailPDKEvent>(_getDetailToState);
+    on<PostApprovePDKEvent>(_postApproveToState);
+    on<PostRejectPDKEvent>(_postRejectToState);
   }
 
-  Stream<PDKBlocState> _getProgressToState(GetProcessPDKEvent e) async* {
-    yield LoadingPDKState();
+  _getProgressToState(GetProcessPDKEvent e, Emitter<PDKBlocState> emit) async {
+    emit(LoadingPDKState());
     final token = _sharedPreferences.getString("access_token");
-
     try {
       final response = await _PDKRepository.getListProcess("Bearer $token");
       if(response.message == "ok") {
-        yield GetListProcessState(response.result);
+        emit(GetListProcessState(response.result));
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 500) {
-        yield FailedPDKState();
+        emit(FailedPDKState());
       } else if (e.response?.statusCode == 504) {
-        yield NotLoggedInPDKState();
+        emit(NotLoggedInPDKState());
       }
     }
   }
 
-  Stream<PDKBlocState> _getDoneToState(GetDonePDKEvent e) async* {
-    yield LoadingPDKState();
+  _getDoneToState(GetDonePDKEvent e, Emitter<PDKBlocState> emit) async {
+    emit(LoadingPDKState());
     final token = _sharedPreferences.getString("access_token");
 
     try {
-      final response = await _PDKRepository.getListDone("Bearer $token");
+      final response = await _PDKRepository.getListDone("Bearer $token", e.filter);
       if(response.message == "ok") {
-        yield GetListDoneState(response.result!);
+        emit(GetListDoneState(response.result));
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 500) {
-        yield FailedPDKState();
+        emit(FailedPDKState());
       } else if (e.response?.statusCode == 504) {
-        yield NotLoggedInPDKState();
+        emit(NotLoggedInPDKState());
       }
     }
   }
 
-  Stream<PDKBlocState> _getDetailToState(GetDetailPDKEvent e) async* {
-    yield LoadingPDKState();
+  _getDetailToState(GetDetailPDKEvent e, Emitter<PDKBlocState> emit) async {
+    emit(LoadingPDKState());
     final token = _sharedPreferences.getString("access_token");
     try {
       final response = await _PDKRepository.getDetailPDK("Bearer $token", e.id);
       if(response.message == "ok") {
-        yield GetDetailState(response.result);
+        emit(GetDetailState(response.result));
       }
     } on DioException catch (e) {
-      print(e.message);
       if (e.response?.statusCode == 500) {
-        yield FailedPDKState();
+        emit(FailedPDKState());
       } else if (e.response?.statusCode == 504) {
-        yield NotLoggedInPDKState();
+        emit(NotLoggedInPDKState());
       }
     }
   }
 
-  Stream<PDKBlocState> _postApproveToState(PostApprovePDKEvent e) async* {
-    yield LoadingPDKState();
+  _postApproveToState(PostApprovePDKEvent e, Emitter<PDKBlocState> emit) async {
+    emit(LoadingPDKState());
     final token = _sharedPreferences.getString("access_token");
     try {
       final response = await _PDKRepository.approvePDK("Bearer $token", e.desc, e.date, e.id, e.cat, e.branch, e.disc, e.idDet);
       if(response.message == "updated") {
-        yield SuccessPostApproveState();
+        emit(SuccessPostApproveState());
       }
     } on DioException catch (e) {
-      print(e.message);
       if (e.response?.statusCode == 500) {
-        yield FailedPDKState();
+        emit(FailedPDKState());
       } else if (e.response?.statusCode == 403) {
-        yield NotLoggedInPDKState();
+        emit(NotLoggedInPDKState());
       } else if (e.response?.statusCode == 409) {
-        yield PostFailedPDKState();
+        emit(PostFailedPDKState());
       }
     }
   }
 
-  Stream<PDKBlocState> _postRejectToState(PostRejectPDKEvent e) async* {
-    yield LoadingPDKState();
+  _postRejectToState(PostRejectPDKEvent e, Emitter<PDKBlocState> emit) async {
+    emit(LoadingPDKState());
     final token = _sharedPreferences.getString("access_token");
     try {
       final response = await _PDKRepository.rejectPDK("Bearer $token", e.desc, e.date, e.id, e.cat, e.branch);
       if(response.message == "rejected") {
-        yield SuccessPostRejectState();
+        emit(SuccessPostRejectState());
       }
     } on DioException catch (e) {
-      print(e.message);
       if (e.response?.statusCode == 500) {
-        yield FailedPDKState();
+        emit(FailedPDKState());
       } else if (e.response?.statusCode == 403) {
-        yield NotLoggedInPDKState();
+        emit(NotLoggedInPDKState());
       } else if (e.response?.statusCode == 409) {
-        yield PostFailedPDKState();
+        emit(PostFailedPDKState());
       }
     }
   }

@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data_sources/repository/user_repository.dart';
-import '../../utils/global_state.dart';
 import 'user_state.dart';
 import 'user_event.dart';
 import 'user_bloc.dart';
@@ -18,62 +17,51 @@ class UserBloc extends Bloc<UserEvent, UserBlocState> {
 
   static create(UserRepository userRepository, SharedPreferences sharedPreferences) => UserBloc(userRepository, sharedPreferences);
 
-  UserBloc(this._userRepository, this._sharedPreferences) : super(LoadingUserState());
-
-  @override
-  Stream<UserBlocState> mapEventToState(UserEvent event) async* {
-    if(event is GetUserEvent) {
-      yield* _mapToGetUserEvent(event);
-    }
-    if(event is LogoutEvent) {
-      yield* _logoutToState(event);
-    }
-    if(event is ChangeNameEvent) {
-      yield* _changeNameToState(event);
-    }
-    if(event is ChangePasswordEvent) {
-      yield* _changePasswordToState(event);
-    }
+  UserBloc(this._userRepository, this._sharedPreferences) : super(LoadingUserState()) {
+    on<GetUserEvent>(_getUserEvent);
+    on<LogoutEvent>(_logoutToState);
+    on<ChangeNameEvent>(_changeNameToState);
+    on<ChangePasswordEvent>(_changePasswordToState);
   }
 
-  Stream<UserBlocState> _mapToGetUserEvent(GetUserEvent e) async* {
-    yield LoadingUserState();
+  _getUserEvent(GetUserEvent e, Emitter<UserBlocState> emit) async {
+    emit(LoadingUserState());
     final token = _sharedPreferences.getString("access_token");
     try{
       final response = await _userRepository.getUser("Bearer $token");
       if (response.message == "ok") {
-        yield GetUserState(response.result, response.check);
+        emit(GetUserState(response.result, response.check));
       }
     } on DioException catch(e) {
       if(e.response?.statusCode == 500) {
-        yield NotLoggedInState();
+        emit(NotLoggedInState());
       }
       else {
-        yield FailedUserState();
+        emit(FailedUserState());
       }
     }
   }
 
-  Stream<UserBlocState> _logoutToState(LogoutEvent e) async* {
-    yield LoadingUserState();
+  _logoutToState(LogoutEvent e, Emitter<UserBlocState> emit) async {
+    emit(LoadingUserState());
     final token = _sharedPreferences.getString("access_token");
     try {
       final response = await _userRepository.logout("Bearer $token");
       if(response.message == "you've been logged out") {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.remove("access_token");
-        yield NotLoggedInState();
+        emit(NotLoggedInState());
       }
-    } on DioError catch (e) {
+    } on DioException catch(e) {
       if(e.response?.statusCode == 400){
-        yield NotLoggedInState();
+        emit(NotLoggedInState());
       }
-      yield ServerErrorState();
+      emit(ServerErrorState());
     }
   }
 
-  Stream<UserBlocState> _changeNameToState(ChangeNameEvent e) async* {
-    yield LoadingUserState();
+  _changeNameToState(ChangeNameEvent e, Emitter<UserBlocState> emit) async {
+    emit(LoadingUserState());
     final token = _sharedPreferences.getString("access_token");
     try {
       final response = await _userRepository.changeName(
@@ -81,19 +69,19 @@ class UserBloc extends Bloc<UserEvent, UserBlocState> {
         e.name
       );
       if(response.message == "name has been changed") {
-        yield SuccessChangeNameState();
+        emit(SuccessChangeNameState());
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 500) {
-        yield FailedUserState();
+        emit(FailedUserState());
       } else if (e.response?.statusCode == 504) {
-        yield NotLoggedInState();
+        emit(NotLoggedInState());
       }
     }
   }
 
-  Stream<UserBlocState> _changePasswordToState(ChangePasswordEvent e) async* {
-    yield LoadingUserState();
+   _changePasswordToState(ChangePasswordEvent e, Emitter<UserBlocState> emit) async {
+    emit(LoadingUserState());
     final token = _sharedPreferences.getString("access_token");
     try {
       final response = await _userRepository.changePassword(
@@ -105,15 +93,15 @@ class UserBloc extends Bloc<UserEvent, UserBlocState> {
       if(response.message == "ok") {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString("access_token", response.token);
-        yield SuccessChangePasswordState();
+        emit(SuccessChangePasswordState());
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 403) {
-        yield WrongPasswordState();
+        emit(WrongPasswordState());
       } else if (e.response?.statusCode == 500) {
-        yield FailedUserState();
+        emit(FailedUserState());
       } else if (e.response?.statusCode == 420) {
-        yield PasswordNotMatchedState();
+        emit(PasswordNotMatchedState());
       }
     }
   }

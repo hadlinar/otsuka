@@ -48,7 +48,7 @@ class AppModule {
 
   Widget configureBloc(Widget app) {
     return MultiBlocProvider(providers: [
-      BlocProvider<LoginBloc> (
+      BlocProvider<LoginBloc>(
         create: (_) => LoginBloc.create(injector.get()),
       ),
       BlocProvider<UserBloc> (

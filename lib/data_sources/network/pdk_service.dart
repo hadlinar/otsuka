@@ -16,7 +16,7 @@ abstract class PDKService{
   Future<ListProcessResponse> getListProcess(@Header("Authorization") String authorization);
 
   @GET('/done')
-  Future<ListDoneResponse> getListDone(@Header("Authorization") String authorization);
+  Future<ListDoneResponse> getListDone(@Header("Authorization") String authorization, @Query("filter") String filter);
 
   @GET('/detail/{id}')
   Future<DetailPDKResponse> getPDK(@Header("Authorization") String authorization, @Path('id') String id);

@@ -14,38 +14,34 @@ class LoginBloc extends Bloc<LoginBlocEvent, LoginBlocState> {
 
   static create(LoginRepository repo) => LoginBloc(repo);
 
-  LoginBloc(this._loginRepository) : super(LoadingLoginState());
-
-  @override
-  Stream<LoginBlocState> mapEventToState(LoginBlocEvent event) async* {
-    if(event is LoginEvent) {
-      yield* _loginToState(event);
-    }
+  LoginBloc(this._loginRepository) : super(InitialLoginState()) {
+    on<LoginEvent>(_loginEvent);
   }
 
-  Stream<LoginBlocState> _loginToState(LoginEvent e) async* {
-    yield LoadingLoginState();
-    try {
+  _loginEvent(LoginEvent event, Emitter<LoginBlocState> emit) async {
+    emit(LoadingLoginState());
+    try{
       final response = await _loginRepository.login(
-          username: e.username,
-          password: e.password
+        username: event.username,
+        password: event.password
       );
+
       if(response.message == "ok") {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString("access_token", response.token);
-        yield SuccessLoginState();
+        emit(SuccessLoginState());
       }
-    } on DioException catch (e) {
+    } on DioException catch (e){
       if (e.response?.statusCode == 401) {
-        yield WrongPasswordLoginState();
+        emit(WrongPasswordLoginState());
       } else if (e.response?.statusCode == 500) {
-        yield FailedLoginState();
+        emit(FailedLoginState());
       } else if (e.response?.statusCode == 504) {
-        yield NotLoggedInState();
+        emit(NotLoggedInState());
       } else if (e.response?.statusCode == 400) {
-        yield NotMatchedLoginState();
+        emit(NotMatchedLoginState());
       } else if (e.response?.statusCode == 404) {
-        yield NoUsernameState();
+        emit(NoUsernameState());
       }
     }
   }

@@ -130,7 +130,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                 Container(
                                                   padding: const EdgeInsets.all(4),
                                                   child: Text(
-                                                      "PDK Maker",
+                                                      "Maker",
                                                       style: Global.getCustomFont(Global.DARK_GREY, 13, 'book')
                                                   ),
                                                 ),
@@ -309,7 +309,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                                     Container(
                                                       padding: const EdgeInsets.all(4),
                                                       child: Text(
-                                                          DateFormat('HH:mm, d MMM yyyy').format(widget.pdk.date),
+                                                          DateFormat('d MMM yyyy').format(widget.pdk.date),
                                                           style: Global.getCustomFont(Global.BLACK, 13, 'book')
                                                       ),
                                                     )

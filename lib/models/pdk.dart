@@ -1,39 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'pdk.g.dart';
 
-// {
-// "id": 77,
-// "no_register": null,
-// "branch_id": "44",
-// "kategori_otsuka": "S",
-// "kode_pelanggan": "30000231",
-// "supplier_id": "10002",
-// "maker": "baguss",
-// "description": "",
-// "date": "2023-07-07T01:18:53.000Z",
-// "user_approve_1": null,
-// "user_desc_1": null,
-// "date_approve_1": null,
-// "user_approve_2": null,
-// "user_desc_2": null,
-// "date_approve_2": null,
-// "user_approve_3": null,
-// "user_desc_3": null,
-// "date_approve_3": null,
-// "user_approve_4": null,
-// "user_desc_4": null,
-// "date_approve_4": null,
-// "user_approve_5": null,
-// "user_desc_5": null,
-// "date_approve_5": null,
-// "user_approve_6": null,
-// "user_desc_6": null,
-// "date_approve_6": null,
-// "final_status": null,
-// "no_draft": "0005/REQ-RN/BGR/VII/2023",
-// "rm_otsuka": "Tiur"
-// },
-
 @JsonSerializable()
 class PDK {
   int id;

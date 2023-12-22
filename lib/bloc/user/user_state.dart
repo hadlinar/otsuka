@@ -5,63 +5,40 @@ import '../../models/user.dart';
 
 @immutable
 abstract class UserBlocState extends Equatable{
+  const UserBlocState();
+
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [];
 }
 
-class LoadingUserState extends UserBlocState{
-  @override
-  List<Object?> get props => [];
-}
+class InitialUserBlocState extends UserBlocState {}
 
-class SuccessUserState extends UserBlocState{
-  @override
-  List<Object?> get props => [];
-}
+class LoadingUserState extends UserBlocState{}
 
-class FailedUserState extends UserBlocState{
-  @override
-  List<Object?> get props => [];
-}
+class SuccessUserState extends UserBlocState{}
 
-class NotLoggedInState extends UserBlocState{
-  @override
-  List<Object?> get props => [];
-}
+class FailedUserState extends UserBlocState{}
 
-class ServerErrorState extends UserBlocState{
-  @override
-  List<Object?> get props => [];
-}
+class NotLoggedInState extends UserBlocState{}
+
+class ServerErrorState extends UserBlocState{}
 
 class GetUserState extends UserBlocState{
-  User getUser;
-  String check;
+  final User getUser;
+  final String check;
 
-  GetUserState(this.getUser, this.check);
-}
+  const GetUserState(this.getUser, this.check);
 
-class LogoutState extends UserBlocState{
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [getUser, check];
 }
 
-class SuccessChangeNameState extends UserBlocState{
-  @override
-  List<Object?> get props => [];
-}
+class LogoutState extends UserBlocState{}
 
-class SuccessChangePasswordState extends UserBlocState{
-  @override
-  List<Object?> get props => [];
-}
+class SuccessChangeNameState extends UserBlocState{}
 
-class PasswordNotMatchedState extends UserBlocState{
-  @override
-  List<Object?> get props => [];
-}
+class SuccessChangePasswordState extends UserBlocState{}
 
-class WrongPasswordState extends UserBlocState{
-  @override
-  List<Object?> get props => [];
-}
+class PasswordNotMatchedState extends UserBlocState{}
+
+class WrongPasswordState extends UserBlocState{}

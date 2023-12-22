@@ -13,8 +13,8 @@ class PDKRepository {
     return response;
   }
 
-  Future<ListDoneResponse> getListDone(String token) async {
-    final response = await pdkService.getListDone(token);
+  Future<ListDoneResponse> getListDone(String token, String filter) async {
+    final response = await pdkService.getListDone(token, filter);
 
     return response;
   }
@@ -24,15 +24,6 @@ class PDKRepository {
 
     return response;
   }
-
-  // authData.username, desc, date, authData.role, id, cat, branch, disc, idDet
-
-  // "desc": "test postman 2",
-  // "date": "2023-07-09",
-  // "role": 2,
-  // "cat": "U",
-  // "branch": "44",
-  // "disc": 0
 
   Future<ApprovalResponse> approvePDK(String token, String? desc, String date, int id, String cat, String branch, String disc, int idDet) async {
     final response = await pdkService.postApprove(token, id, idDet, {
@@ -45,14 +36,6 @@ class PDKRepository {
 
     return response;
   }
-
-  // authData.username, desc, date, authData.role, id, cat, branch
-
-  // "desc": "reject postman 6",
-  // "date": "2023-07-09",
-  // "role": 6,
-  // "cat": "U",
-  // "branch": "44"
 
   Future<ApprovalResponse> rejectPDK(String token, String desc, String date, int id, String cat, String branch) async {
     final response = await pdkService.postReject(token, id, {
