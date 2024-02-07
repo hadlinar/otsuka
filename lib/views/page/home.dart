@@ -57,8 +57,6 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   Future refreshData() async {
-    print("refresh");
-    //
     BlocListener<PDKBloc, PDKBlocState>(
         listener: (context, state) {
 
@@ -80,14 +78,12 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
             setState(() {
               pdk = state.getListProcess;
               searchPdk = state.getListProcess;
-              print(searchPdk.length);
             });
           }
           if (state is GetListDoneState) {
             setState(() {
               donePdk = state.getListDone;
               searchDonePdk = state.getListDone;
-              print(searchDonePdk.length);
             });
           }
         }
@@ -100,8 +96,8 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
     super.initState();
     _scaffoldKey = GlobalKey();
     BlocProvider.of<UserBloc>(context).add(GetUserEvent());
-    BlocProvider.of<PDKBloc>(context).add(GetProcessPDKEvent());
-    BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent("oldest"));
+    BlocProvider.of<PDKBloc>(context).add(GetProcessPDKEvent("newest"));
+    BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent("newest"));
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -349,8 +345,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                   color: Color(Global.TOSCA),
                                   backgroundColor: Colors.white,
                                   onRefresh: () async {
-                                    BlocProvider.of<PDKBloc>(context).add(GetProcessPDKEvent());
-                                    BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent("oldest"));
+                                    BlocProvider.of<PDKBloc>(context).add(GetProcessPDKEvent("newest"));
                                   },
                                   child: Column(
                                     children: [
@@ -395,17 +390,56 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                               shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(8)
                                               ),
-                                              child: SizedBox(
-                                                width: 28,
-                                                height: 38,
-                                                child: Image.asset(Global.IC_FILTER),
+                                              child: Container(
+                                                padding: const EdgeInsets.all(5),
+                                                child: SizedBox(
+                                                  width: 20,
+                                                  height: 30,
+                                                  child: Image.asset(Global.IC_FILTER),
+                                                ),
                                               )
                                             ),
-                                            onTap: (){},
+                                            onTap: (){
+                                              showModalBottomSheet(
+                                                  context: context,
+                                                  backgroundColor: Colors.white,
+                                                  builder: (context) {
+                                                    return Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: <Widget>[
+                                                        ListTile(
+                                                          title: Text(
+                                                            "Oldest",
+                                                            style: Global.getCustomFont(Global.DARK_GREY, 15, 'book'),
+                                                          ),
+                                                          onTap: () {
+                                                            BlocProvider.of<PDKBloc>(context).add(GetProcessPDKEvent("oldest"));
+                                                            Navigator.pop(context);
+                                                          },
+                                                        ),
+                                                        ListTile(
+                                                          title: Text(
+                                                            "Newest",
+                                                            style: Global.getCustomFont(Global.DARK_GREY, 15, 'book'),
+                                                          ),
+                                                          onTap: () {
+                                                            BlocProvider.of<PDKBloc>(context).add(GetProcessPDKEvent("newest"));
+                                                            Navigator.pop(context);
+                                                          },
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }
+                                                );
+                                            },
                                           )
                                         ],
                                       ),
 
+
+
+
+                                      // processed
                                       Expanded(
                                           child: pdk.isNotEmpty ? ListView.builder(
                                             itemCount: searchPdk.length,
@@ -420,8 +454,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                                   if (resMessage == 200) {
                                                     setState(() {
                                                       searchController.text = '';
-                                                      BlocProvider.of<PDKBloc>(context).add(GetProcessPDKEvent());
-                                                      BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent("oldest"));
+                                                      BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent("newest"));
                                                     });
                                                   }
                                                 },
@@ -471,40 +504,125 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                     color: Color(Global.TOSCA),
                                     backgroundColor: Colors.white,
                                     onRefresh: () async {
-                                      BlocProvider.of<PDKBloc>(context).add(GetProcessPDKEvent());
-                                      BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent("oldest"));
+                                      BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent("newest"));
                                     },
                                     child: Column(
                                       children: [
-                                        SizedBox(
-                                          height: 50,
-                                          child: Container(
-                                            margin: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
-                                            child: TextFormField(
-                                              style: Global.getCustomFont(Global.BLACK, 14, 'medium'),
-                                              maxLines: 1,
-                                              controller: searchController,
-                                              onChanged: (text) {
-                                                filterSearchResults(text);
-                                              },
-                                              decoration: InputDecoration(
-                                                labelText: "Search",
-                                                filled: true,
-                                                fillColor: Color(Global.GREY),
-                                                alignLabelWithHint: true,
-                                                enabledBorder: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(10),
-                                                    borderSide: BorderSide(
-                                                      color: Color(Global.GREY),
-                                                    )),
-                                                focusedBorder: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(10),
-                                                    borderSide: BorderSide(
-                                                      color: Color(Global.GREY),
-                                                    )),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: SizedBox(
+                                                height: 50,
+                                                child: Container(
+                                                  margin: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 2),
+                                                  child: TextFormField(
+                                                    style: Global.getCustomFont(Global.BLACK, 14, 'medium'),
+                                                    maxLines: 1,
+                                                    controller: searchController,
+                                                    onChanged: (text) {
+                                                      filterSearchResults(text);
+                                                    },
+                                                    decoration: InputDecoration(
+                                                      labelText: "Search",
+                                                      filled: true,
+                                                      fillColor: Color(Global.GREY),
+                                                      alignLabelWithHint: true,
+                                                      enabledBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(10),
+                                                          borderSide: BorderSide(
+                                                            color: Color(Global.GREY),
+                                                          )),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(10),
+                                                          borderSide: BorderSide(
+                                                            color: Color(Global.GREY),
+                                                          )),
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ),
+                                            InkWell(
+                                              child: Card(
+                                                  elevation: 0.3,
+                                                  shadowColor: const Color(0xffBCBCBC),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(8)
+                                                  ),
+                                                  child: Container(
+                                                    padding: const EdgeInsets.all(5),
+                                                    child: SizedBox(
+                                                      width: 20,
+                                                      height: 30,
+                                                      child: Image.asset(Global.IC_FILTER),
+                                                    ),
+                                                  )
+                                              ),
+                                              onTap: (){
+                                                showModalBottomSheet(
+                                                    context: context,
+                                                    backgroundColor: Colors.white,
+                                                    builder: (context) {
+                                                      return Column(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          ListTile(
+                                                            title: Text(
+                                                              "Oldest",
+                                                              style: Global.getCustomFont(Global.DARK_GREY, 15, 'book'),
+                                                            ),
+                                                            onTap: () {
+                                                              BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent("oldest"));
+                                                              Navigator.pop(context);
+                                                            },
+                                                          ),
+                                                          ListTile(
+                                                            title: Text(
+                                                              "Newest",
+                                                              style: Global.getCustomFont(Global.DARK_GREY, 15, 'book'),
+                                                            ),
+                                                            onTap: () {
+                                                              BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent("newest"));
+                                                              Navigator.pop(context);
+                                                            },
+                                                          ),
+                                                          ListTile(
+                                                            title: Text(
+                                                              "Done",
+                                                              style: Global.getCustomFont(Global.DARK_GREY, 15, 'book'),
+                                                            ),
+                                                            onTap: () {
+                                                              BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent("done"));
+                                                              Navigator.pop(context);
+                                                            },
+                                                          ),
+                                                          ListTile(
+                                                            title: Text(
+                                                              "Rejected",
+                                                              style: Global.getCustomFont(Global.DARK_GREY, 15, 'book'),
+                                                            ),
+                                                            onTap: () {
+                                                              BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent("reject"));
+                                                              Navigator.pop(context);
+                                                            },
+                                                          ),
+                                                          ListTile(
+                                                            title: Text(
+                                                              "Processed",
+                                                              style: Global.getCustomFont(Global.DARK_GREY, 15, 'book'),
+                                                            ),
+                                                            onTap: () {
+                                                              BlocProvider.of<PDKBloc>(context).add(GetDonePDKEvent("processed"));
+                                                              Navigator.pop(context);
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }
+                                                );
+                                              },
+                                            )
+                                          ],
                                         ),
                                         Expanded(
                                             child: donePdk.isNotEmpty ? Container(
@@ -521,7 +639,7 @@ class _HomePage extends State<Home> with SingleTickerProviderStateMixin {
                                                           builder: (context) => donePage
                                                       ));
                                                     },
-                                                    child: Global.getDoneCardList(searchDonePdk[i].kode_pelanggan, searchDonePdk[i].branch, searchDonePdk[i].cust, searchDonePdk[i].date, searchDonePdk[i].final_status),
+                                                    child: Global.getDoneCardList(searchDonePdk[i].final_status == true ? searchDonePdk[i].no_register : "", searchDonePdk[i].branch, searchDonePdk[i].cust, searchDonePdk[i].date, searchDonePdk[i].final_status, searchDonePdk[i].no_draft),
                                                   );
                                                 },
                                               ),

@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Global {
-  // static const String baseUrl = "http://10.0.2.2:3000/otsuka/ediscount";
+  static const String baseUrl = "http://10.0.2.2:3000/otsuka/ediscount";
   // static const String baseUrl = "http://103.140.207.25:3000/otsuka/ediscount";
-  static const String baseUrl = "http://172.20.60.14:3000/otsuka/ediscount";
+  // static const String baseUrl = "http://172.20.60.14:3000/otsuka/ediscount";
 
   static String ACCESS_TOKEN = "access_token";
 
@@ -172,7 +172,13 @@ class Global {
   }
 
 
-  static Card getDoneCardList(String kodPel, String cabang, String cust, DateTime date, bool? status) {
+  static Card getDoneCardList(String? noReg, String cabang, String cust, DateTime date, bool? status, String noDraft) {
+    bool showContainer = false;
+
+    if(noReg != "") {
+      showContainer = true;
+    }
+
     return Card(
         elevation: 0,
         shadowColor: const Color(0xffBCBCBC),
@@ -183,8 +189,21 @@ class Global {
             padding: const EdgeInsets.only(left: 12, top: 7),
             child: Column(
               children: [
+                if(showContainer)
+                  Container(
+                    padding: const EdgeInsets.only(top: 3),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Row(
+                        children: [
+                          Text("Reg No: ", style: Global.getCustomFont(DARK_GREY, 14, 'book')),
+                          Text(noReg!, style: Global.getCustomFont(BLACK, 14, 'medium')),
+                        ],
+                      )
+                    ),
+                  ),
                 Container(
-                  padding: const EdgeInsets.only(top: 3),
+                  padding: const EdgeInsets.only(top: 8),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(cust, style: Global.getCustomFont(BLACK, 14, 'medium')),
@@ -194,7 +213,7 @@ class Global {
                   padding: const EdgeInsets.only(top: 8),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: Text(kodPel, style: Global.getCustomFont(DARK_GREY, 14, 'book')),
+                    child: Text(noDraft, style: Global.getCustomFont(DARK_GREY, 14, 'book')),
                   ),
                 ),
                 Container(

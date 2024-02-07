@@ -13,7 +13,7 @@ class _PDKService implements PDKService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://172.20.60.14:3000/otsuka/ediscount';
+    baseUrl ??= 'http://10.0.2.2:3000/otsuka/ediscount';
   }
 
   final Dio _dio;
@@ -21,9 +21,12 @@ class _PDKService implements PDKService {
   String? baseUrl;
 
   @override
-  Future<ListProcessResponse> getListProcess(String authorization) async {
+  Future<ListProcessResponse> getListProcess(
+    String authorization,
+    String filter,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'filter': filter};
     final _headers = <String, dynamic>{r'Authorization': authorization};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;

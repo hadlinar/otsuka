@@ -27,7 +27,7 @@ class PDKBloc extends Bloc<PDKBlocEvent, PDKBlocState> {
     emit(LoadingPDKState());
     final token = _sharedPreferences.getString("access_token");
     try {
-      final response = await _PDKRepository.getListProcess("Bearer $token");
+      final response = await _PDKRepository.getListProcess("Bearer $token", e.filter);
       if(response.message == "ok") {
         emit(GetListProcessState(response.result));
       }

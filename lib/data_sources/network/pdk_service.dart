@@ -13,7 +13,7 @@ abstract class PDKService{
   static create(Dio dio) => _PDKService(dio);
 
   @GET('/process')
-  Future<ListProcessResponse> getListProcess(@Header("Authorization") String authorization);
+  Future<ListProcessResponse> getListProcess(@Header("Authorization") String authorization, @Query("filter") String filter);
 
   @GET('/done')
   Future<ListDoneResponse> getListDone(@Header("Authorization") String authorization, @Query("filter") String filter);

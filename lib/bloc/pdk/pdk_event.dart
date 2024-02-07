@@ -10,7 +10,14 @@ abstract class PDKBlocEvent extends Equatable{
   List<Object> get props => [];
 }
 
-class GetProcessPDKEvent extends PDKBlocEvent{}
+class GetProcessPDKEvent extends PDKBlocEvent{
+  String filter;
+
+  GetProcessPDKEvent(this.filter);
+
+  @override
+  List<Object> get props => [filter];
+}
 
 class GetDonePDKEvent extends PDKBlocEvent{
   String filter;

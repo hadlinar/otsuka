@@ -7,8 +7,8 @@ class PDKRepository {
 
   PDKRepository(this.pdkService);
 
-  Future<ListProcessResponse> getListProcess(String token) async {
-    final response = await pdkService.getListProcess(token);
+  Future<ListProcessResponse> getListProcess(String token, String filter) async {
+    final response = await pdkService.getListProcess(token, filter);
 
     return response;
   }

@@ -30,7 +30,7 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
   static String convertToIdr(dynamic number, int decimalDigit) {
     NumberFormat currencyFormatter = NumberFormat.currency(
       locale: 'id',
-      symbol: 'Rp ',
+      symbol: '',
       decimalDigits: decimalDigit,
     );
     return currencyFormatter.format(number);
@@ -159,7 +159,6 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
             backgroundColor: Color(Global.BACKGROUND),
             body: BlocListener<PDKBloc, PDKBlocState>(
                 listener: (context, state) {
-                  print(state.toString());
                   if(state is LoadingPDKState) {
                     Container(
                       color: Colors.white,
@@ -459,6 +458,10 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                     5: widget.pdk.user_desc_5,
                                     6: widget.pdk.user_desc_6
                                   };
+                                  print("ini i ${i+1}");
+                                  print("widget.user.role_id ${widget.user.role_id}");
+                                  print("userDesc[i+1] ${userDesc[i+1]}");
+                                  print("level ${widget.pdk.level}");
 
                                   if(i+1 == widget.user.role_id) {
                                     //APPROVED
@@ -479,44 +482,55 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                     }
                                   }
                                   else if (i+1 > widget.user.role_id) {
-                                    if(i+1 <= widget.pdk.level) {
-                                      if(userDesc[i+1] == null && dateAppr[i+1] != null) {
-                                        //approved
-                                        return SizedBox(
-                                          width: MediaQuery.of(context).size.width / 1.1,
-                                          child: CustomStepper(status: "Approved", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level)
-                                        );
+                                    if(widget.pdk.level != 9) {
+                                      if(i+1 <= widget.pdk.level) {
+                                        if(userDesc[i+1] == null && dateAppr[i+1] != null) {
+                                          //approved
+                                          return SizedBox(
+                                              width: MediaQuery.of(context).size.width / 1.1,
+                                              child: CustomStepper(status: "Approved", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level)
+                                          );
+                                        }
+                                        else if(userDesc[i+1] != null) {
+                                          // reject
+                                          return SizedBox(
+                                              width: MediaQuery.of(context).size.width / 1.1,
+                                              child: CustomStepper(status: "Rejected", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level, desc: userDesc[i+1]!)
+
+                                          );
+                                        }
+                                        else if(widget.pdk.final_status != null && dateAppr[i+1] == null) {
+                                          return Container();
+                                        } else {
+                                          return SizedBox(
+                                              width: MediaQuery.of(context).size.width / 1.1,
+                                              child: CustomStepper(status: "Waiting", index: i, level: widget.pdk.level)
+                                          );
+                                        }
                                       }
-                                      else if(userDesc[i+1] != null) {
-                                        // reject
+                                      else if (userDesc[i+1] != null) {
+                                        // rejected
                                         return SizedBox(
                                             width: MediaQuery.of(context).size.width / 1.1,
                                             child: CustomStepper(status: "Rejected", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level, desc: userDesc[i+1]!)
-
                                         );
                                       }
-                                      else if(widget.pdk.final_status != null && dateAppr[i+1] == null) {
-                                        return Container();
-                                      } else {
+                                    } else {
+                                      if(i+1 == 1 && widget.user.role_id == 1 && userDesc[i+1] == null) {
                                         return SizedBox(
                                             width: MediaQuery.of(context).size.width / 1.1,
-                                            child: CustomStepper(status: "Waiting", index: i, level: widget.pdk.level)
+                                            child: CustomStepper(status: "Approved", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level, desc: userDesc[i+1]!)
                                         );
                                       }
-                                    }
-                                    else if (userDesc[i+1] != null) {
-                                      // rejected
-                                      return SizedBox(
-                                          width: MediaQuery.of(context).size.width / 1.1,
-                                          child: CustomStepper(status: "Rejected", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level, desc: userDesc[i+1]!)
-                                      );
-                                    }
-                                    else {
-                                      return SizedBox(
-                                          width: MediaQuery.of(context).size.width / 1.1,
-                                          child: CustomStepper(status: "Approved", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level)
-
-                                      );
+                                      else if(i+1 == 3 && widget.user.role_id == 3 && userDesc[i+1] == null) {
+                                        return SizedBox(
+                                            width: MediaQuery.of(context).size.width / 1.1,
+                                            child: CustomStepper(status: "Approved", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level, desc: userDesc[i+1]!)
+                                        );
+                                      }
+                                      else {
+                                        return Container();
+                                      }
                                     }
                                   }
                                   else if (i+1 < widget.user.role_id) {
