@@ -448,7 +448,8 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
                                       child: CustomStepper(status: "Waiting", index: i, level: 3)
                                   );
                                 }
-                              } else {
+                              }
+                              else {
                                 if(i+1 == widget.user?.role_id || i+1 == 0) {
                                   return Container();
                                 }else if(i+1 < widget.user!.role_id) {
