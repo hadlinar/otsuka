@@ -13,7 +13,7 @@ class _PDKService implements PDKService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://170.1.70.67:3000/otsuka/ediscount';
+    baseUrl ??= 'http://103.140.207.25:3000/otsuka/ediscount';
   }
 
   final Dio _dio;
