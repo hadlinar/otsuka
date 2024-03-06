@@ -475,6 +475,14 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                                           child: CustomStepper(status: "Approved", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level)
                                       );
                                     }
+
+                                    else if (userDesc[i+1] != null) {
+                                      return SizedBox(
+                                          width: MediaQuery.of(context).size.width / 1.1,
+                                          child: CustomStepper(status: "Rejected", index: i, approver: approver[i+1].toString(), date: DateFormat('HH:mm, d MMM yyyy').format(dateAppr[i+1]!).toString(), level: widget.pdk.level, desc: userDesc[i+1]!)
+
+                                      );
+                                    }
                                     else if(i+1 > widget.user.role_id && i+1 <= 3) {
                                       if (userDesc[i+1] != null) {
                                         return SizedBox(
@@ -564,8 +572,6 @@ class _DetailDonePDKPage extends State<DetailDonePDK> {
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, i) {
-                                // print("test");
-                                // print(detailPDK[i].kode_barang);
                                 return Card(
                                     elevation: 0,
                                     shadowColor: const Color(0xffBCBCBC),

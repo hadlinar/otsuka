@@ -179,7 +179,6 @@ class _DetailPendingPDKPage extends State<DetailPendingPDK> {
         backgroundColor: Color(Global.BACKGROUND),
         body: BlocListener<PDKBloc, PDKBlocState>(
           listener: (context, state) {
-            print(state.toString());
             if(state is LoadingPDKState) {
               Container(
                 color: Colors.white,

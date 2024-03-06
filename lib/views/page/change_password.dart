@@ -112,7 +112,6 @@ class _ChangePasswordPage extends State<ChangePasswordPage> {
       },
       child: BlocListener<UserBloc, UserBlocState>(
         listener: (context, state) {
-          print(state.toString());
           if (state is SuccessChangePasswordState) {
             showDialog(
                 context: context,
@@ -337,7 +336,6 @@ class _ChangePasswordPage extends State<ChangePasswordPage> {
                                           }
                                       );
                                     } else {
-                                      print(currentPasswordController.text);
                                       BlocProvider.of<UserBloc>(context).add(
                                           ChangePasswordEvent(
                                               currentPasswordController.text,

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:ediscount/views/page/home.dart';
-import 'package:ediscount/views/page/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +20,8 @@ class Login extends StatefulWidget {
     return _LoginPage();
   }
 }
+
+final GlobalState store = GlobalState.instance;
 
 class _LoginPage extends State<Login> {
   TextEditingController usernameController = TextEditingController();
