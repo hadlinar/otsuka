@@ -1,4 +1,3 @@
-import 'package:ediscount/views/page/home2.dart';
 import 'package:ediscount/views/page/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
